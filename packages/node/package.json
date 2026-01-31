@@ -1,0 +1,45 @@
+{
+  "name": "tell-node",
+  "version": "0.1.0",
+  "description": "Tell SDK for Node.js — analytics events and structured logging",
+  "type": "module",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    }
+  },
+  "files": ["dist"],
+  "scripts": {
+    "build": "tsup",
+    "test": "node --import tsx --test test/*.test.ts",
+    "test:e2e": "TELL_E2E=1 node --import tsx --test test/e2e.test.ts",
+    "typecheck": "tsc --noEmit",
+    "clean": "rm -rf dist"
+  },
+  "dependencies": {
+    "@tell/core": "*"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "tsup": "^8.0.0",
+    "tsx": "^4.0.0",
+    "typescript": "^5.5.0"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ArcadeLabsInc/tell.git",
+    "directory": "SDKs/tell-js/packages/node"
+  },
+  "homepage": "https://tell.rs",
+  "keywords": ["analytics", "logging", "telemetry", "events", "observability", "tell"],
+  "license": "MIT",
+  "author": "Arcade Labs Inc."
+}

@@ -1,0 +1,42 @@
+{
+  "name": "@tell/vue",
+  "version": "0.1.0",
+  "description": "Tell SDK Vue integration — plugin and composable",
+  "type": "module",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    }
+  },
+  "files": ["dist"],
+  "scripts": {
+    "build": "tsup",
+    "test": "echo 'no tests'",
+    "typecheck": "tsc --noEmit",
+    "clean": "rm -rf dist"
+  },
+  "peerDependencies": {
+    "vue": ">=3",
+    "tell-js": "*"
+  },
+  "devDependencies": {
+    "vue": "^3.5.0",
+    "tell-js": "*",
+    "tsup": "^8.0.0",
+    "typescript": "^5.5.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ArcadeLabsInc/tell.git",
+    "directory": "SDKs/tell-js/packages/vue"
+  },
+  "homepage": "https://tell.rs",
+  "keywords": ["analytics", "vue", "composable", "tell"],
+  "license": "MIT",
+  "author": "Arcade Labs Inc."
+}

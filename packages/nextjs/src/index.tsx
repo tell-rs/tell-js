@@ -1,0 +1,79 @@
+"use client";
+
+import { useEffect, useRef, type ReactNode } from "react";
+import { usePathname, useSearchParams } from "next/navigation";
+import tell from "tell-js";
+import type { TellBrowserConfig, Properties } from "tell-js";
+
+export { tell } from "tell-js";
+export type { TellBrowserConfig, Properties } from "tell-js";
+
+export interface TellAnalyticsProps {
+  apiKey: string;
+  options?: TellBrowserConfig;
+  /** Track page views automatically on route change. Default: true */
+  trackPageViews?: boolean;
+  /** Extra properties to include with every page view event. */
+  pageViewProperties?: Properties;
+  children?: ReactNode;
+}
+
+/**
+ * Drop-in Next.js analytics component.
+ * Place in your root layout to auto-configure Tell and track page views.
+ *
+ * ```tsx
+ * // app/layout.tsx
+ * import { TellAnalytics } from "@tell/nextjs";
+ *
+ * export default function RootLayout({ children }) {
+ *   return (
+ *     <html>
+ *       <body>
+ *         <TellAnalytics apiKey="..." />
+ *         {children}
+ *       </body>
+ *     </html>
+ *   );
+ * }
+ * ```
+ */
+export function TellAnalytics({
+  apiKey,
+  options,
+  trackPageViews = true,
+  pageViewProperties,
+  children,
+}: TellAnalyticsProps) {
+  const initialized = useRef(false);
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+
+  // Initialize once
+  useEffect(() => {
+    if (!initialized.current) {
+      tell.configure(apiKey, options);
+      initialized.current = true;
+    }
+    return () => {
+      tell.close();
+    };
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
+  // Track page views on route changes
+  useEffect(() => {
+    if (!trackPageViews || !initialized.current) return;
+
+    const url = searchParams?.toString()
+      ? `${pathname}?${searchParams.toString()}`
+      : pathname;
+
+    tell.track("Page Viewed", {
+      url,
+      path: pathname,
+      ...pageViewProperties,
+    });
+  }, [pathname, searchParams, trackPageViews, pageViewProperties]);
+
+  return children ?? null;
+}

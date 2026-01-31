@@ -1,0 +1,17 @@
+{
+  "name": "@tell/core",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "main": "./src/index.ts",
+  "types": "./src/index.ts",
+  "scripts": {
+    "typecheck": "tsc --noEmit",
+    "build": "echo '@tell/core is internal — consumed via tsup bundling'",
+    "test": "echo 'core tests run from packages that depend on it'",
+    "clean": "echo 'nothing to clean'"
+  },
+  "devDependencies": {
+    "typescript": "^5.5.0"
+  }
+}
