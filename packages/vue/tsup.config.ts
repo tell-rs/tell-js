@@ -6,7 +6,7 @@ export default defineConfig({
   dts: true,
   clean: true,
   sourcemap: true,
-  external: ["vue", "tell-js"],
+  external: ["vue", "@tell-rs/browser"],
   platform: "browser",
   target: "es2022",
 });

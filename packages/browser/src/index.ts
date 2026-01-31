@@ -4,7 +4,7 @@ import type {
   LogLevel,
   Properties,
   BeforeSendFn,
-} from "@tell/core";
+} from "@tell-rs/core";
 import {
   ClosedError,
   ConfigurationError,
@@ -15,7 +15,7 @@ import {
   validateUserId,
   Batcher,
   runBeforeSend,
-} from "@tell/core";
+} from "@tell-rs/core";
 
 import type { TellBrowserConfig, ResolvedBrowserConfig } from "./config.js";
 import { resolveConfig } from "./config.js";
@@ -31,8 +31,8 @@ import { BrowserTransport } from "./transport.js";
 import { PreInitQueue } from "./queue.js";
 
 // Re-export core types and values
-export { Events, type EventName } from "@tell/core";
-export type { Properties, LogLevel, JsonEvent, JsonLog, BeforeSendFn } from "@tell/core";
+export { Events, type EventName } from "@tell-rs/core";
+export type { Properties, LogLevel, JsonEvent, JsonLog, BeforeSendFn } from "@tell-rs/core";
 export {
   TellError,
   ConfigurationError,
@@ -40,7 +40,7 @@ export {
   NetworkError,
   ClosedError,
   SerializationError,
-} from "@tell/core";
+} from "@tell-rs/core";
 
 // Re-export browser-specific config
 export type { TellBrowserConfig } from "./config.js";

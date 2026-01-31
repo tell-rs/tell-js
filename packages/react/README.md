@@ -1,4 +1,4 @@
-# @tell/react
+# @tell-rs/react
 
 Tell SDK React bindings — provider, hooks, and components.
 
@@ -6,19 +6,19 @@ Tell SDK React bindings — provider, hooks, and components.
 
 ```sh
 # npm
-npm install @tell/react tell-js
+npm install @tell-rs/react @tell-rs/browser
 
 # yarn
-yarn add @tell/react tell-js
+yarn add @tell-rs/react @tell-rs/browser
 
 # pnpm
-pnpm add @tell/react tell-js
+pnpm add @tell-rs/react @tell-rs/browser
 
 # bun
-bun add @tell/react tell-js
+bun add @tell-rs/react @tell-rs/browser
 ```
 
-`tell-js` is a peer dependency and must be installed alongside `@tell/react`.
+`@tell-rs/browser` is a peer dependency and must be installed alongside `@tell-rs/react`.
 
 ## Quick Start
 
@@ -28,7 +28,7 @@ Wrap your app with `TellProvider` at the root:
 
 ```tsx
 // src/App.tsx
-import { TellProvider } from "@tell/react";
+import { TellProvider } from "@tell-rs/react";
 
 export default function App() {
   return (
@@ -42,7 +42,7 @@ export default function App() {
 ### 2. Track events
 
 ```tsx
-import { useTrack } from "@tell/react";
+import { useTrack } from "@tell-rs/react";
 
 function SignUpButton() {
   const track = useTrack();
@@ -58,7 +58,7 @@ function SignUpButton() {
 ### 3. Identify users
 
 ```tsx
-import { useIdentify } from "@tell/react";
+import { useIdentify } from "@tell-rs/react";
 
 function LoginForm() {
   const identify = useIdentify();
@@ -96,7 +96,7 @@ Calls `tell.configure()` once on mount and `tell.close()` on unmount.
 For cases where hooks aren't suitable:
 
 ```ts
-import { tell } from "@tell/react";
+import { tell } from "@tell-rs/react";
 
 tell.track("Background Task Done");
 ```

@@ -6,7 +6,7 @@ export default defineConfig({
   dts: true,
   clean: true,
   sourcemap: true,
-  external: ["react", "tell-js"],
+  external: ["react", "@tell-rs/browser"],
   platform: "browser",
   target: "es2022",
 });

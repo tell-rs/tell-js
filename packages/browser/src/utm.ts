@@ -1,4 +1,4 @@
-import type { Properties } from "@tell/core";
+import type { Properties } from "@tell-rs/core";
 
 const UTM_KEYS = [
   "utm_source",

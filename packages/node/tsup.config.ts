@@ -6,5 +6,5 @@ export default defineConfig({
   dts: true,
   clean: true,
   sourcemap: true,
-  noExternal: ["@tell/core"], // Bundle core into output — no external dep
+  noExternal: ["@tell-rs/core"], // Bundle core into output — no external dep
 });

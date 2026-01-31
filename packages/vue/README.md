@@ -1,4 +1,4 @@
-# @tell/vue
+# @tell-rs/vue
 
 Tell SDK Vue integration — plugin and composable for Vue 3.
 
@@ -6,19 +6,19 @@ Tell SDK Vue integration — plugin and composable for Vue 3.
 
 ```sh
 # npm
-npm install @tell/vue tell-js
+npm install @tell-rs/vue @tell-rs/browser
 
 # yarn
-yarn add @tell/vue tell-js
+yarn add @tell-rs/vue @tell-rs/browser
 
 # pnpm
-pnpm add @tell/vue tell-js
+pnpm add @tell-rs/vue @tell-rs/browser
 
 # bun
-bun add @tell/vue tell-js
+bun add @tell-rs/vue @tell-rs/browser
 ```
 
-`tell-js` is a peer dependency and must be installed alongside `@tell/vue`.
+`@tell-rs/browser` is a peer dependency and must be installed alongside `@tell-rs/vue`.
 
 ## Quick Start
 
@@ -27,7 +27,7 @@ bun add @tell/vue tell-js
 ```ts
 // main.ts
 import { createApp } from "vue";
-import { TellPlugin } from "@tell/vue";
+import { TellPlugin } from "@tell-rs/vue";
 import App from "./App.vue";
 
 const app = createApp(App);
@@ -39,7 +39,7 @@ app.mount("#app");
 
 ```vue
 <script setup>
-import { useTell } from "@tell/vue";
+import { useTell } from "@tell-rs/vue";
 
 const tell = useTell();
 
@@ -92,7 +92,7 @@ Throws if `TellPlugin` was not installed.
 For use outside of components:
 
 ```ts
-import { tell } from "@tell/vue";
+import { tell } from "@tell-rs/vue";
 
 tell.track("Background Task Done");
 ```
@@ -103,7 +103,7 @@ Track page views on route changes:
 
 ```ts
 // router.ts
-import { tell } from "@tell/vue";
+import { tell } from "@tell-rs/vue";
 import router from "./router";
 
 router.afterEach((to) => {

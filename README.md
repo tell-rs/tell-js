@@ -7,10 +7,10 @@ Analytics events and structured logging for JavaScript and TypeScript.
 | Package | npm | Description |
 |---------|-----|-------------|
 | [`tell-node`](./packages/node) | `npm i tell-node` | Server SDK for Node.js |
-| [`tell-js`](./packages/browser) | `npm i tell-js` | Browser SDK |
-| [`@tell/react`](./packages/react) | `npm i @tell/react` | React provider and hooks |
-| [`@tell/nextjs`](./packages/nextjs) | `npm i @tell/nextjs` | Next.js auto page tracking |
-| [`@tell/vue`](./packages/vue) | `npm i @tell/vue` | Vue plugin and composable |
+| [`@tell-rs/browser`](./packages/browser) | `npm i @tell-rs/browser` | Browser SDK |
+| [`@tell-rs/react`](./packages/react) | `npm i @tell-rs/react` | React provider and hooks |
+| [`@tell-rs/nextjs`](./packages/nextjs) | `npm i @tell-rs/nextjs` | Next.js auto page tracking |
+| [`@tell-rs/vue`](./packages/vue) | `npm i @tell-rs/vue` | Vue plugin and composable |
 
 ## Quick Links
 

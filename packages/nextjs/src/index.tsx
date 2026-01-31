@@ -2,11 +2,11 @@
 
 import { useEffect, useRef, type ReactNode } from "react";
 import { usePathname, useSearchParams } from "next/navigation";
-import tell from "tell-js";
-import type { TellBrowserConfig, Properties } from "tell-js";
+import tell from "@tell-rs/browser";
+import type { TellBrowserConfig, Properties } from "@tell-rs/browser";
 
-export { tell } from "tell-js";
-export type { TellBrowserConfig, Properties } from "tell-js";
+export { tell } from "@tell-rs/browser";
+export type { TellBrowserConfig, Properties } from "@tell-rs/browser";
 
 export interface TellAnalyticsProps {
   apiKey: string;
@@ -24,7 +24,7 @@ export interface TellAnalyticsProps {
  *
  * ```tsx
  * // app/layout.tsx
- * import { TellAnalytics } from "@tell/nextjs";
+ * import { TellAnalytics } from "@tell-rs/nextjs";
  *
  * export default function RootLayout({ children }) {
  *   return (

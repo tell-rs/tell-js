@@ -1,4 +1,4 @@
-import type { TellError, BeforeSendFn, JsonEvent, JsonLog } from "@tell/core";
+import type { TellError, BeforeSendFn, JsonEvent, JsonLog } from "@tell-rs/core";
 
 export interface TellBrowserConfig {
   endpoint?: string;

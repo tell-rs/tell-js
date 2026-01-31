@@ -1,13 +1,13 @@
 import type { TellConfig } from "./config.js";
-import type { JsonEvent, JsonLog, LogLevel, Properties, BeforeSendFn } from "@tell/core";
+import type { JsonEvent, JsonLog, LogLevel, Properties, BeforeSendFn } from "@tell-rs/core";
 import { resolveConfig } from "./config.js";
-import { ClosedError, ValidationError, validateApiKey, validateEventName, validateLogMessage, validateUserId, Batcher, runBeforeSend } from "@tell/core";
+import { ClosedError, ValidationError, validateApiKey, validateEventName, validateLogMessage, validateUserId, Batcher, runBeforeSend } from "@tell-rs/core";
 import { HttpTransport } from "./transport.js";
 
 // Re-export core types and values
-export { Events, type EventName } from "@tell/core";
-export type { Properties, LogLevel, JsonEvent, JsonLog, BeforeSendFn } from "@tell/core";
-export { TellError, ConfigurationError, ValidationError, NetworkError, ClosedError, SerializationError } from "@tell/core";
+export { Events, type EventName } from "@tell-rs/core";
+export type { Properties, LogLevel, JsonEvent, JsonLog, BeforeSendFn } from "@tell-rs/core";
+export { TellError, ConfigurationError, ValidationError, NetworkError, ClosedError, SerializationError } from "@tell-rs/core";
 
 // Re-export node-specific config
 export type { TellConfig } from "./config.js";

@@ -1,5 +1,5 @@
 {
-  "name": "@tell/nextjs",
+  "name": "@tell-rs/nextjs",
   "version": "0.1.0",
   "description": "Tell SDK Next.js integration — automatic page tracking",
   "type": "module",
@@ -23,20 +23,20 @@
   "peerDependencies": {
     "next": ">=13",
     "react": ">=18",
-    "tell-js": "*"
+    "@tell-rs/browser": "*"
   },
   "devDependencies": {
     "@types/react": "^19.0.0",
     "next": "^15.0.0",
     "react": "^19.0.0",
-    "tell-js": "*",
+    "@tell-rs/browser": "*",
     "tsup": "^8.0.0",
     "typescript": "^5.5.0"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/ArcadeLabsInc/tell.git",
-    "directory": "SDKs/tell-js/packages/nextjs"
+    "url": "git+https://github.com/tell-rs/tell-js.git",
+    "directory": "packages/nextjs"
   },
   "homepage": "https://tell.rs",
   "keywords": ["analytics", "nextjs", "next", "tell"],

@@ -1,9 +1,9 @@
 import { inject, type App, type InjectionKey } from "vue";
-import tell from "tell-js";
-import type { TellBrowserConfig, TellInstance } from "tell-js";
+import tell from "@tell-rs/browser";
+import type { TellBrowserConfig, TellInstance } from "@tell-rs/browser";
 
-export { tell } from "tell-js";
-export type { TellBrowserConfig, TellInstance } from "tell-js";
+export { tell } from "@tell-rs/browser";
+export type { TellBrowserConfig, TellInstance } from "@tell-rs/browser";
 
 const TELL_KEY: InjectionKey<TellInstance> = Symbol("tell");
 
@@ -17,7 +17,7 @@ export interface TellPluginOptions extends TellBrowserConfig {
  * ```ts
  * // main.ts
  * import { createApp } from "vue";
- * import { TellPlugin } from "@tell/vue";
+ * import { TellPlugin } from "@tell-rs/vue";
  *
  * const app = createApp(App);
  * app.use(TellPlugin, { apiKey: "..." });
@@ -45,7 +45,7 @@ export const TellPlugin = {
  *
  * ```vue
  * <script setup>
- * import { useTell } from "@tell/vue";
+ * import { useTell } from "@tell-rs/vue";
  * const tell = useTell();
  * tell.track("Page Viewed");
  * </script>

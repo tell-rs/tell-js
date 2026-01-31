@@ -1,5 +1,5 @@
 {
-  "name": "@tell/vue",
+  "name": "@tell-rs/vue",
   "version": "0.1.0",
   "description": "Tell SDK Vue integration — plugin and composable",
   "type": "module",
@@ -22,18 +22,18 @@
   },
   "peerDependencies": {
     "vue": ">=3",
-    "tell-js": "*"
+    "@tell-rs/browser": "*"
   },
   "devDependencies": {
     "vue": "^3.5.0",
-    "tell-js": "*",
+    "@tell-rs/browser": "*",
     "tsup": "^8.0.0",
     "typescript": "^5.5.0"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/ArcadeLabsInc/tell.git",
-    "directory": "SDKs/tell-js/packages/vue"
+    "url": "git+https://github.com/tell-rs/tell-js.git",
+    "directory": "packages/vue"
   },
   "homepage": "https://tell.rs",
   "keywords": ["analytics", "vue", "composable", "tell"],

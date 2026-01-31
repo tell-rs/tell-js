@@ -1,4 +1,4 @@
-# @tell/nextjs
+# @tell-rs/nextjs
 
 Tell SDK Next.js integration — automatic page tracking for the App Router.
 
@@ -6,19 +6,19 @@ Tell SDK Next.js integration — automatic page tracking for the App Router.
 
 ```sh
 # npm
-npm install @tell/nextjs tell-js
+npm install @tell-rs/nextjs @tell-rs/browser
 
 # yarn
-yarn add @tell/nextjs tell-js
+yarn add @tell-rs/nextjs @tell-rs/browser
 
 # pnpm
-pnpm add @tell/nextjs tell-js
+pnpm add @tell-rs/nextjs @tell-rs/browser
 
 # bun
-bun add @tell/nextjs tell-js
+bun add @tell-rs/nextjs @tell-rs/browser
 ```
 
-`tell-js` is a peer dependency and must be installed alongside `@tell/nextjs`.
+`@tell-rs/browser` is a peer dependency and must be installed alongside `@tell-rs/nextjs`.
 
 ## Quick Start
 
@@ -26,7 +26,7 @@ Add `TellAnalytics` to your root layout:
 
 ```tsx
 // app/layout.tsx
-import { TellAnalytics } from "@tell/nextjs";
+import { TellAnalytics } from "@tell-rs/nextjs";
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
@@ -63,7 +63,7 @@ For events beyond page views, import `tell` directly:
 ```tsx
 "use client";
 
-import { tell } from "@tell/nextjs";
+import { tell } from "@tell-rs/nextjs";
 
 function CheckoutButton() {
   return (
@@ -74,10 +74,10 @@ function CheckoutButton() {
 }
 ```
 
-Or combine with `@tell/react` hooks in the same project:
+Or combine with `@tell-rs/react` hooks in the same project:
 
 ```tsx
-import { useTrack } from "@tell/react";
+import { useTrack } from "@tell-rs/react";
 ```
 
 ## How It Works

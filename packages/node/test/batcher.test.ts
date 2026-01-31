@@ -1,6 +1,6 @@
 import { describe, it, mock } from "node:test";
 import assert from "node:assert/strict";
-import { Batcher } from "@tell/core";
+import { Batcher } from "@tell-rs/core";
 
 describe("Batcher", () => {
   it("flushes when size threshold reached", async () => {

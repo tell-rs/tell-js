@@ -6,7 +6,7 @@ export default defineConfig({
   dts: true,
   clean: true,
   sourcemap: true,
-  noExternal: ["@tell/core"],
+  noExternal: ["@tell-rs/core"],
   platform: "browser",
   target: "es2022",
 });

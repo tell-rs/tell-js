@@ -1,4 +1,4 @@
-# tell-js
+# @tell-rs/browser
 
 Tell SDK for browsers — analytics events, structured logging, automatic sessions, and privacy controls.
 
@@ -6,22 +6,22 @@ Tell SDK for browsers — analytics events, structured logging, automatic sessio
 
 ```sh
 # npm
-npm install tell-js
+npm install @tell-rs/browser
 
 # yarn
-yarn add tell-js
+yarn add @tell-rs/browser
 
 # pnpm
-pnpm add tell-js
+pnpm add @tell-rs/browser
 
 # bun
-bun add tell-js
+bun add @tell-rs/browser
 ```
 
 ## Quick Start
 
 ```ts
-import tell from "tell-js";
+import tell from "@tell-rs/browser";
 
 tell.configure("your-api-key");
 
@@ -120,7 +120,7 @@ await tell.close()     // flush + shut down
 ### Config Presets
 
 ```ts
-import tell, { development, production } from "tell-js";
+import tell, { development, production } from "@tell-rs/browser";
 
 tell.configure("your-api-key", development());  // localhost, debug logging
 tell.configure("your-api-key", production());   // defaults, error-only logging
@@ -139,9 +139,9 @@ tell.configure("your-api-key", production());   // defaults, error-only logging
 
 For React, Next.js, and Vue, use the dedicated packages:
 
-- [`@tell/react`](https://www.npmjs.com/package/@tell/react) — React provider and hooks
-- [`@tell/nextjs`](https://www.npmjs.com/package/@tell/nextjs) — Next.js auto page tracking
-- [`@tell/vue`](https://www.npmjs.com/package/@tell/vue) — Vue plugin and composable
+- [`@tell-rs/react`](https://www.npmjs.com/package/@tell-rs/react) — React provider and hooks
+- [`@tell-rs/nextjs`](https://www.npmjs.com/package/@tell-rs/nextjs) — Next.js auto page tracking
+- [`@tell-rs/vue`](https://www.npmjs.com/package/@tell-rs/vue) — Vue plugin and composable
 
 ## License
 

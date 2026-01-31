@@ -1,4 +1,4 @@
-import type { LogLevel, Properties } from "@tell/core";
+import type { LogLevel, Properties } from "@tell-rs/core";
 
 export type QueuedCall =
   | { method: "track"; args: [string, Properties?] }

@@ -1,7 +1,7 @@
 import { describe, it, beforeEach, afterEach } from "node:test";
 import assert from "node:assert/strict";
 import { BrowserTransport } from "../src/transport.js";
-import type { JsonEvent, JsonLog } from "@tell/core";
+import type { JsonEvent, JsonLog } from "@tell-rs/core";
 import { fetchCalls, resetFetchMock, mockFetch, setGlobal, restoreGlobal } from "./helpers.js";
 
 describe("BrowserTransport", () => {

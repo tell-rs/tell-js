@@ -1,7 +1,7 @@
 import { describe, it, beforeEach, afterEach } from "node:test";
 import assert from "node:assert/strict";
 import { HttpTransport } from "../src/transport.js";
-import type { JsonEvent, JsonLog } from "@tell/core";
+import type { JsonEvent, JsonLog } from "@tell-rs/core";
 
 // Mock fetch for transport tests
 let fetchCalls: { url: string; init: RequestInit }[] = [];

@@ -7,7 +7,7 @@ import {
   validateUserId,
   ConfigurationError,
   ValidationError,
-} from "@tell/core";
+} from "@tell-rs/core";
 
 describe("validateApiKey", () => {
   it("accepts valid 32-char hex key", () => {

@@ -1,7 +1,7 @@
 import { describe, it } from "node:test";
 import assert from "node:assert/strict";
-import { runBeforeSend } from "@tell/core";
-import type { BeforeSendFn } from "@tell/core";
+import { runBeforeSend } from "@tell-rs/core";
+import type { BeforeSendFn } from "@tell-rs/core";
 
 describe("runBeforeSend", () => {
   it("passes item through a single function", () => {

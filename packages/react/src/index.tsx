@@ -8,12 +8,12 @@ import {
   useRef,
   type ReactNode,
 } from "react";
-import tell from "tell-js";
-import type { TellBrowserConfig, TellInstance, Properties } from "tell-js";
+import tell from "@tell-rs/browser";
+import type { TellBrowserConfig, TellInstance, Properties } from "@tell-rs/browser";
 
-// Re-export everything from tell-js for convenience
-export { tell } from "tell-js";
-export type { TellBrowserConfig, TellInstance, Properties } from "tell-js";
+// Re-export everything from @tell-rs/browser for convenience
+export { tell } from "@tell-rs/browser";
+export type { TellBrowserConfig, TellInstance, Properties } from "@tell-rs/browser";
 
 // ---------------------------------------------------------------------------
 // Context

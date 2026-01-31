@@ -6,9 +6,8 @@
 # Login to npm
 npm login
 
-# The @tell scope requires an npm org — create at https://www.npmjs.com/org/create
-# Then link it:
-npm config set @tell:registry https://registry.npmjs.org/
+# The @tell-rs scope uses the tell-rs npm org (https://www.npmjs.com/org/tell-rs)
+npm config set @tell-rs:registry https://registry.npmjs.org/
 ```
 
 ## 1. Pre-flight
@@ -61,7 +60,7 @@ npm publish -w packages/vue     --access public --dry-run
 
 ## 5. Publish
 
-Order matters — `tell-node` and `tell-js` before adapters.
+Order matters — `tell-node` and `@tell-rs/browser` before adapters.
 
 ```sh
 npm publish -w packages/node    --access public

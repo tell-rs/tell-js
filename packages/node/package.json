@@ -22,7 +22,7 @@
     "clean": "rm -rf dist"
   },
   "dependencies": {
-    "@tell/core": "*"
+    "@tell-rs/core": "*"
   },
   "devDependencies": {
     "@types/node": "^22.0.0",
@@ -35,8 +35,8 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/ArcadeLabsInc/tell.git",
-    "directory": "SDKs/tell-js/packages/node"
+    "url": "git+https://github.com/tell-rs/tell-js.git",
+    "directory": "packages/node"
   },
   "homepage": "https://tell.rs",
   "keywords": ["analytics", "logging", "telemetry", "events", "observability", "tell"],

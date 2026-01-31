@@ -1,6 +1,6 @@
-import type { TellError } from "@tell/core";
-import type { BeforeSendFn } from "@tell/core";
-import type { JsonEvent, JsonLog } from "@tell/core";
+import type { TellError } from "@tell-rs/core";
+import type { BeforeSendFn } from "@tell-rs/core";
+import type { JsonEvent, JsonLog } from "@tell-rs/core";
 import { hostname } from "node:os";
 
 export interface TellConfig {

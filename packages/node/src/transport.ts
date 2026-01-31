@@ -1,5 +1,5 @@
-import type { JsonEvent, JsonLog } from "@tell/core";
-import { NetworkError } from "@tell/core";
+import type { JsonEvent, JsonLog } from "@tell-rs/core";
+import { NetworkError } from "@tell-rs/core";
 import { gzipSync } from "node:zlib";
 
 export interface TransportConfig {
