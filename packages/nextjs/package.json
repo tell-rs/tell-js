@@ -1,6 +1,6 @@
 {
   "name": "@tell-rs/nextjs",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Tell SDK Next.js integration — automatic page tracking",
   "type": "module",
   "main": "./dist/index.cjs",
@@ -13,7 +13,9 @@
       "require": "./dist/index.cjs"
     }
   },
-  "files": ["dist"],
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "build": "tsup",
     "test": "echo 'no tests'",
@@ -39,7 +41,12 @@
     "directory": "packages/nextjs"
   },
   "homepage": "https://tell.rs",
-  "keywords": ["analytics", "nextjs", "next", "tell"],
+  "keywords": [
+    "analytics",
+    "nextjs",
+    "next",
+    "tell"
+  ],
   "license": "MIT",
   "author": "Arcade Labs Inc."
 }

@@ -1,6 +1,6 @@
 {
   "name": "@tell-rs/react",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Tell SDK React bindings — provider, hooks, and components",
   "type": "module",
   "main": "./dist/index.cjs",
@@ -13,7 +13,9 @@
       "require": "./dist/index.cjs"
     }
   },
-  "files": ["dist"],
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "build": "tsup",
     "test": "echo 'no tests'",
@@ -37,7 +39,12 @@
     "directory": "packages/react"
   },
   "homepage": "https://tell.rs",
-  "keywords": ["analytics", "react", "hooks", "tell"],
+  "keywords": [
+    "analytics",
+    "react",
+    "hooks",
+    "tell"
+  ],
   "license": "MIT",
   "author": "Arcade Labs Inc."
 }

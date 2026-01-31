@@ -38,7 +38,7 @@ git add -A && git commit -m "your message"
 
 ```sh
 # pick one: patch | minor | major
-VER=patch
+set VER patch
 
 npm version $VER --no-git-tag-version -w packages/core
 npm version $VER --no-git-tag-version -w packages/node
@@ -75,9 +75,9 @@ If a publish fails partway, re-run only the failed commands — npm skips alread
 ## 6. Tag + push
 
 ```sh
-VERSION=$(node -p "require('./packages/browser/package.json').version")
-git add -A && git commit -m "release v${VERSION}"
-git tag "v${VERSION}"
+set VERSION (node -p "require('./packages/browser/package.json').version")
+git add -A && git commit -m "release v$VERSION"
+git tag "v$VERSION"
 git push && git push --tags
 ```
 

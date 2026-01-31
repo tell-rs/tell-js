@@ -1,6 +1,6 @@
 {
   "name": "@tell-rs/browser",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Tell SDK for browsers — analytics events and structured logging",
   "type": "module",
   "main": "./dist/index.cjs",
@@ -13,7 +13,9 @@
       "require": "./dist/index.cjs"
     }
   },
-  "files": ["dist"],
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "build": "tsup",
     "test": "node --import tsx --test test/*.test.ts",
@@ -36,7 +38,15 @@
     "directory": "packages/browser"
   },
   "homepage": "https://tell.rs",
-  "keywords": ["analytics", "logging", "telemetry", "events", "observability", "tell", "browser"],
+  "keywords": [
+    "analytics",
+    "logging",
+    "telemetry",
+    "events",
+    "observability",
+    "tell",
+    "browser"
+  ],
   "license": "MIT",
   "author": "Arcade Labs Inc."
 }

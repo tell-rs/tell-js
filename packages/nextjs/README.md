@@ -22,17 +22,17 @@ bun add @tell-rs/nextjs @tell-rs/browser
 
 ## Quick Start
 
-Add `TellAnalytics` to your root layout:
+Add `Tell` to your root layout:
 
 ```tsx
 // app/layout.tsx
-import { TellAnalytics } from "@tell-rs/nextjs";
+import { Tell } from "@tell-rs/nextjs";
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html>
       <body>
-        <TellAnalytics apiKey="your-api-key" />
+        <Tell apiKey="your-api-key" />
         {children}
       </body>
     </html>
@@ -44,7 +44,7 @@ That's it. Page views are tracked automatically on every route change.
 
 ## API
 
-### `<TellAnalytics>`
+### `<Tell>`
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
@@ -82,7 +82,7 @@ import { useTrack } from "@tell-rs/react";
 
 ## How It Works
 
-`TellAnalytics` is a `"use client"` component that:
+`Tell` is a `"use client"` component that:
 
 1. Calls `tell.configure()` once on mount
 2. Watches `usePathname()` and `useSearchParams()` from `next/navigation`

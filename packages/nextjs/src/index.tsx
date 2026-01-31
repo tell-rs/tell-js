@@ -8,7 +8,7 @@ import type { TellBrowserConfig, Properties } from "@tell-rs/browser";
 export { tell } from "@tell-rs/browser";
 export type { TellBrowserConfig, Properties } from "@tell-rs/browser";
 
-export interface TellAnalyticsProps {
+export interface TellProps {
   apiKey: string;
   options?: TellBrowserConfig;
   /** Track page views automatically on route change. Default: true */
@@ -24,13 +24,13 @@ export interface TellAnalyticsProps {
  *
  * ```tsx
  * // app/layout.tsx
- * import { TellAnalytics } from "@tell-rs/nextjs";
+ * import { Tell } from "@tell-rs/nextjs";
  *
  * export default function RootLayout({ children }) {
  *   return (
  *     <html>
  *       <body>
- *         <TellAnalytics apiKey="..." />
+ *         <Tell apiKey="..." />
  *         {children}
  *       </body>
  *     </html>
@@ -38,13 +38,13 @@ export interface TellAnalyticsProps {
  * }
  * ```
  */
-export function TellAnalytics({
+export function Tell({
   apiKey,
   options,
   trackPageViews = true,
   pageViewProperties,
   children,
-}: TellAnalyticsProps) {
+}: TellProps) {
   const initialized = useRef(false);
   const pathname = usePathname();
   const searchParams = useSearchParams();
