@@ -16,7 +16,7 @@ function send(label: string): void {
   console.log(`  -> ${label}`);
 }
 
-describe("tell-node e2e", { skip: !process.env.TELL_E2E }, () => {
+describe("@tell-rs/node e2e", { skip: !process.env.TELL_E2E }, () => {
   it("smoke — sends every API method to the collector", async () => {
     console.log();
     console.log("  Tell Node SDK — E2E smoke test");

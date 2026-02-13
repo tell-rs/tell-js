@@ -6,7 +6,7 @@ Analytics events and structured logging for JavaScript and TypeScript.
 
 | Package | npm | Description |
 |---------|-----|-------------|
-| [`tell-node`](./packages/node) | `npm i tell-node` | Server SDK for Node.js |
+| [`@tell-rs/node`](./packages/node) | `npm i @tell-rs/node` | Server SDK for Node.js |
 | [`@tell-rs/browser`](./packages/browser) | `npm i @tell-rs/browser` | Browser SDK |
 | [`@tell-rs/react`](./packages/react) | `npm i @tell-rs/react` | React provider and hooks |
 | [`@tell-rs/nextjs`](./packages/nextjs) | `npm i @tell-rs/nextjs` | Next.js auto page tracking |

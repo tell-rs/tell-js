@@ -23,6 +23,7 @@ fi
 echo "Running preflight checks..."
 npm run clean
 npm install --silent
+npm run build -w packages/browser
 npm run typecheck
 npm run test
 npm run build

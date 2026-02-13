@@ -48,6 +48,9 @@ export function Tell({
   const initialized = useRef(false);
   const pathname = usePathname();
   const searchParams = useSearchParams();
+  const search = searchParams?.toString() ?? "";
+  const pageViewPropsRef = useRef(pageViewProperties);
+  pageViewPropsRef.current = pageViewProperties;
 
   // Initialize once
   useEffect(() => {
@@ -64,16 +67,14 @@ export function Tell({
   useEffect(() => {
     if (!trackPageViews || !initialized.current) return;
 
-    const url = searchParams?.toString()
-      ? `${pathname}?${searchParams.toString()}`
-      : pathname;
+    const url = search ? `${pathname}?${search}` : pathname;
 
     tell.track("Page Viewed", {
       url,
       path: pathname,
-      ...pageViewProperties,
+      ...pageViewPropsRef.current,
     });
-  }, [pathname, searchParams, trackPageViews, pageViewProperties]);
+  }, [pathname, search, trackPageViews]);
 
   return children ?? null;
 }

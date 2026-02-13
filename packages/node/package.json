@@ -1,5 +1,5 @@
 {
-  "name": "tell-node",
+  "name": "@tell-rs/node",
   "version": "0.1.2",
   "description": "Tell SDK for Node.js — analytics events and structured logging",
   "type": "module",
@@ -11,6 +11,11 @@
       "types": "./dist/index.d.ts",
       "import": "./dist/index.js",
       "require": "./dist/index.cjs"
+    },
+    "./events": {
+      "types": "./dist/events.d.ts",
+      "import": "./dist/events.js",
+      "require": "./dist/events.cjs"
     }
   },
   "files": [

@@ -294,20 +294,29 @@ describe("tell (browser singleton)", () => {
 
   // --- close ---
 
-  it("close flushes and rejects subsequent events", async () => {
-    const errors: Error[] = [];
+  it("close flushes and allows reconfigure", async () => {
     tell.configure(API_KEY, {
       botDetection: false,
-      onError: (err) => errors.push(err),
     });
 
     tell.track("Last Event");
     await tell.close();
 
-    tell.track("Too Late");
+    // Events after close are buffered for next configure
+    tell.track("Buffered");
 
-    assert.equal(errors.length, 1);
-    assert.equal(errors[0].name, "ClosedError");
+    // Reconfigure works after close
+    tell.configure(API_KEY, { botDetection: false });
+    await tell.flush();
+
+    const bodies = fetchCalls.flatMap((c) =>
+      (c.init.body as string).split("\n").map((l: string) => JSON.parse(l))
+    );
+    const events = bodies.filter((b: any) => b.type === "track");
+    const names = events.map((e: any) => e.event);
+
+    assert.ok(names.includes("Last Event"));
+    assert.ok(names.includes("Buffered"));
   });
 
   // --- beforeSend ---

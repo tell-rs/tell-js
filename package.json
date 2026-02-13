@@ -6,13 +6,18 @@
     "packages/*"
   ],
   "scripts": {
-    "build": "npm run build --workspaces",
+    "build": "npm run build -w packages/core -w packages/node -w packages/browser && npm run build -w packages/react -w packages/nextjs -w packages/vue",
     "test": "npm run test --workspaces",
     "test:e2e": "npm run test:e2e --workspaces --if-present",
     "typecheck": "npm run typecheck --workspaces",
-    "clean": "npm run clean --workspaces"
+    "clean": "npm run clean --workspaces",
+    "size": "node scripts/size.mjs"
   },
   "engines": {
     "node": ">=18"
+  },
+  "devDependencies": {
+    "@happy-dom/global-registrator": "^20.6.1",
+    "happy-dom": "^20.6.1"
   }
 }

@@ -1,4 +1,4 @@
-# tell-node
+# @tell-rs/node
 
 Tell SDK for Node.js — analytics events and structured logging.
 
@@ -6,22 +6,22 @@ Tell SDK for Node.js — analytics events and structured logging.
 
 ```sh
 # npm
-npm install tell-node
+npm install @tell-rs/node
 
 # yarn
-yarn add tell-node
+yarn add @tell-rs/node
 
 # pnpm
-pnpm add tell-node
+pnpm add @tell-rs/node
 
 # bun
-bun add tell-node
+bun add @tell-rs/node
 ```
 
 ## Quick Start
 
 ```ts
-import { Tell } from "tell-node";
+import { Tell } from "@tell-rs/node";
 
 const tell = new Tell({ apiKey: "your-api-key" });
 
@@ -102,7 +102,7 @@ await tell.close()    // flush + shut down (call before process exit)
 ### Config Presets
 
 ```ts
-import { Tell, development, production } from "tell-node";
+import { Tell, development, production } from "@tell-rs/node";
 
 // Development: localhost:8080, small batches, debug logging
 const dev = new Tell(development("your-api-key"));
@@ -116,7 +116,7 @@ const prod = new Tell(production("your-api-key"));
 Use the built-in `redact()` factory to strip sensitive data before events leave your server:
 
 ```ts
-import { Tell, redact, redactLog, SENSITIVE_PARAMS } from "tell-node";
+import { Tell, redact, redactLog, SENSITIVE_PARAMS } from "@tell-rs/node";
 
 const tell = new Tell({
   apiKey: "your-api-key",

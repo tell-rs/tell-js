@@ -30,10 +30,14 @@ export const TellPlugin = {
     tell.configure(apiKey, config);
     app.provide(TELL_KEY, tell);
 
-    // Flush on unmount
     app.config.globalProperties.$tell = tell;
     const originalUnmount = app.unmount.bind(app);
     app.unmount = () => {
+      // Fire-and-forget: close() flushes batchers via fetch. In an SPA the
+      // page stays alive so the fetch completes normally. If the tab is
+      // closing, the browser SDK's beforeunload/visibilitychange handlers
+      // already drain via sendBeacon. Awaiting here would make unmount async,
+      // which Vue callers don't expect.
       tell.close();
       originalUnmount();
     };

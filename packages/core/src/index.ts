@@ -1,4 +1,4 @@
-// @tell-rs/core — shared internals for tell-node and tell-js
+// @tell-rs/core — shared internals for @tell-rs/node and @tell-rs/browser
 // This package is private and never published to npm.
 
 export type { Properties, EventType, LogLevel, JsonEvent, JsonLog } from "./types.js";

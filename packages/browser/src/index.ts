@@ -705,6 +705,8 @@ const tell: TellInstance = {
     } catch (err) {
       reportError(err);
     }
+
+    configured = false;
   },
 
   reset(): void {

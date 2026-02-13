@@ -45,4 +45,4 @@ If the script breaks or you need fine-grained control, the steps are:
 
 npm allows unpublish within 72 hours:
 
-    npm unpublish tell-node@VERSION
+    npm unpublish @tell-rs/node@VERSION

@@ -44,7 +44,7 @@ export function TellProvider({ apiKey, options, children }: TellProviderProps) {
     };
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
-  return <TellContext value={tell}>{children}</TellContext>;
+  return <TellContext.Provider value={tell}>{children}</TellContext.Provider>;
 }
 
 // ---------------------------------------------------------------------------

@@ -78,13 +78,13 @@ export class BrowserTransport {
         continue;
       }
 
-      try {
-        const controller = new AbortController();
-        const timer = setTimeout(
-          () => controller.abort(),
-          this.networkTimeout
-        );
+      const controller = new AbortController();
+      const timer = setTimeout(
+        () => controller.abort(),
+        this.networkTimeout
+      );
 
+      try {
         const response = await fetch(url, {
           method: "POST",
           headers,
@@ -92,8 +92,6 @@ export class BrowserTransport {
           signal: controller.signal,
           keepalive: true,
         });
-
-        clearTimeout(timer);
 
         if (response.status === 202) {
           return;
@@ -150,6 +148,8 @@ export class BrowserTransport {
 
         lastError =
           err instanceof Error ? err : new NetworkError(String(err));
+      } finally {
+        clearTimeout(timer);
       }
     }
 
