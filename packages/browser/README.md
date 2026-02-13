@@ -135,6 +135,29 @@ tell.configure("your-api-key", production());   // defaults, error-only logging
 - **localStorage persistence** — device ID, user ID, session, and super properties survive page reloads
 - **Do Not Track** — optional respect for `navigator.doNotTrack`
 
+## Privacy & Redaction
+
+The browser SDK automatically collects anonymous device context (browser, OS, screen, locale, timezone, referrer, connection type). See the [full data disclosure table](https://docs.tell.rs/tracking/sdks/javascript/browser#data-collected-automatically) for every field.
+
+**URLs include query strings.** If your app puts tokens or sensitive data in URLs, use the `redact()` utility to strip them:
+
+```ts
+import tell, { redact, redactLog, SENSITIVE_PARAMS } from "@tell-rs/browser";
+
+tell.configure("your-api-key", {
+  beforeSend: redact({
+    dropRoutes: ["/internal", "/health"],
+    stripParams: [...SENSITIVE_PARAMS, "session_id"],
+    redactKeys: ["email", "phone"],
+  }),
+  beforeSendLog: redactLog({
+    redactKeys: ["password"],
+  }),
+});
+```
+
+See the [docs site](https://docs.tell.rs/tracking/sdks/javascript/browser#redaction--beforesend) for more `beforeSend` patterns and server-side pipeline redaction.
+
 ## Framework Integrations
 
 For React, Next.js, and Vue, use the dedicated packages:

@@ -111,6 +111,28 @@ const dev = new Tell(development("your-api-key"));
 const prod = new Tell(production("your-api-key"));
 ```
 
+## Redaction
+
+Use the built-in `redact()` factory to strip sensitive data before events leave your server:
+
+```ts
+import { Tell, redact, redactLog, SENSITIVE_PARAMS } from "tell-node";
+
+const tell = new Tell({
+  apiKey: "your-api-key",
+  beforeSend: redact({
+    dropRoutes: ["/health", "/readyz"],
+    stripParams: SENSITIVE_PARAMS,
+    redactKeys: ["email", "phone", "ssn"],
+  }),
+  beforeSendLog: redactLog({
+    redactKeys: ["password", "credit_card"],
+  }),
+});
+```
+
+See the [docs site](https://docs.tell.rs/tracking/sdks/javascript/node#redaction--beforesend) for more `beforeSend` patterns.
+
 ## License
 
 MIT

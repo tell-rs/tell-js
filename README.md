@@ -16,6 +16,7 @@ Analytics events and structured logging for JavaScript and TypeScript.
 
 - [tell.rs](https://tell.rs) — Documentation
 - [Release Guide](./RELEASE.md) — How to publish new versions
+- [Redaction & Privacy](https://docs.tell.rs/tracking/sdks/javascript/browser#redaction--beforesend) — Client-side PII redaction
 
 ## Development
 

@@ -8,3 +8,4 @@ export { TellError, ConfigurationError, ValidationError, NetworkError, ClosedErr
 export { validateApiKey, validateEventName, validateLogMessage, validateUserId } from "./validation.js";
 export { Batcher, type BatcherConfig } from "./batcher.js";
 export { runBeforeSend } from "./before-send.js";
+export { redact, redactLog, SENSITIVE_PARAMS, type RedactOptions } from "./redact.js";

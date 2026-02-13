@@ -33,6 +33,7 @@ import { PreInitQueue } from "./queue.js";
 // Re-export core types and values
 export { Events, type EventName } from "@tell-rs/core";
 export type { Properties, LogLevel, JsonEvent, JsonLog, BeforeSendFn } from "@tell-rs/core";
+export { redact, redactLog, SENSITIVE_PARAMS, type RedactOptions } from "@tell-rs/core";
 export {
   TellError,
   ConfigurationError,

@@ -1,89 +1,48 @@
 # Release
 
+## Quick version
+
+Commit everything, then run:
+
+    ./scripts/release.sh patch
+
+Replace `patch` with `minor` or `major` as needed. The script handles
+preflight checks, version bumps, publishing, tagging, and pushing.
+
+
 ## First-time setup
 
-```sh
-# Login to npm
-npm login
+Log in to npm and configure the scope (one time only):
 
-# The @tell-rs scope uses the tell-rs npm org (https://www.npmjs.com/org/tell-rs)
-npm config set @tell-rs:registry https://registry.npmjs.org/
-```
+    npm login
+    npm config set @tell-rs:registry https://registry.npmjs.org/
 
-## 1. Pre-flight
+The @tell-rs scope uses the tell-rs npm org.
 
-```sh
-npm run clean --workspaces
-npm install
-npm run typecheck --workspaces
-npm run test --workspaces
-npm run build --workspaces
-```
 
-### E2E (optional, requires Tell server on localhost:8080)
+## What the script does
 
-```sh
-npm run test:e2e
-```
+1. Checks that your working tree is clean
+2. Runs clean, install, typecheck, test, build across all packages
+3. Bumps the version in all 6 package.json files
+4. Dry-run publishes everything and asks for confirmation
+5. Publishes to npm (node + browser first, then react/nextjs/vue)
+6. Commits, tags, and pushes
 
-## 2. Commit
 
-Make sure your working tree is clean before bumping versions.
+## Manual release
 
-```sh
-git add -A && git commit -m "your message"
-```
+If the script breaks or you need fine-grained control, the steps are:
 
-## 3. Bump versions
+1. Bump versions -- run `npm version {patch|minor|major} --no-git-tag-version`
+   for each workspace: core, node, browser, react, nextjs, vue
+2. Publish in order -- node and browser must go before react, nextjs, vue
+   (they depend on @tell-rs/browser)
+3. Commit, tag (`git tag vX.Y.Z`), push with `--tags`
 
-```sh
-# pick one: patch | minor | major
-set VER patch
 
-npm version $VER --no-git-tag-version -w packages/core
-npm version $VER --no-git-tag-version -w packages/node
-npm version $VER --no-git-tag-version -w packages/browser
-npm version $VER --no-git-tag-version -w packages/react
-npm version $VER --no-git-tag-version -w packages/nextjs
-npm version $VER --no-git-tag-version -w packages/vue
-```
+## Emergency unpublish
 
-## 4. Dry run
+npm allows unpublish within 72 hours:
 
-```sh
-npm publish -w packages/node    --access public --dry-run
-npm publish -w packages/browser --access public --dry-run
-npm publish -w packages/react   --access public --dry-run
-npm publish -w packages/nextjs  --access public --dry-run
-npm publish -w packages/vue     --access public --dry-run
-```
-
-## 5. Publish
-
-Order matters — `tell-node` and `@tell-rs/browser` before adapters.
-
-```sh
-npm publish -w packages/node    --access public
-npm publish -w packages/browser --access public
-npm publish -w packages/react   --access public
-npm publish -w packages/nextjs  --access public
-npm publish -w packages/vue     --access public
-```
-
-If a publish fails partway, re-run only the failed commands — npm skips already-published versions.
-
-## 6. Tag + push
-
-```sh
-set VERSION (node -p "require('./packages/browser/package.json').version")
-git add -A && git commit -m "release v$VERSION"
-git tag "v$VERSION"
-git push && git push --tags
-```
-
-## Unpublish (emergency only)
-
-```sh
-# npm allows unpublish within 72 hours
-npm unpublish tell-node@VERSION
-```
+    npm unpublish tell-node@VERSION

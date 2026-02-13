@@ -1,6 +1,6 @@
 {
   "name": "tell-node",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Tell SDK for Node.js — analytics events and structured logging",
   "type": "module",
   "main": "./dist/index.cjs",
@@ -23,10 +23,8 @@
     "typecheck": "tsc --noEmit",
     "clean": "rm -rf dist"
   },
-  "dependencies": {
-    "@tell-rs/core": "*"
-  },
   "devDependencies": {
+    "@tell-rs/core": "*",
     "@types/node": "^22.0.0",
     "tsup": "^8.0.0",
     "tsx": "^4.0.0",
