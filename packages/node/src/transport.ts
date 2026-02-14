@@ -119,6 +119,14 @@ export class HttpTransport {
           if (this.onError) this.onError(err);
           return;
         }
+
+        // DNS failures surface as TypeError from fetch.
+        // These won't resolve by retrying — bail immediately.
+        if (err instanceof TypeError) {
+          if (this.onError) this.onError(new NetworkError(err.message));
+          return;
+        }
+
         lastError =
           err instanceof Error ? err : new NetworkError(String(err));
       }

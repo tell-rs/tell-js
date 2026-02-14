@@ -101,6 +101,36 @@ import { tell } from "@tell-rs/react";
 tell.track("Background Task Done");
 ```
 
+## Page view tracking (TanStack Router, React Router, etc.)
+
+`@tell-rs/react` is router-agnostic. For automatic page view tracking, add a small component that watches your router's location. Here's an example for TanStack Router:
+
+```tsx
+import { useLocation } from "@tanstack/react-router";
+import { useTell } from "@tell-rs/react";
+import { useEffect } from "react";
+
+function TellPageTracker() {
+  const tell = useTell();
+  const location = useLocation();
+
+  useEffect(() => {
+    tell.track("Page Viewed", {
+      url: window.location.href,
+      path: location.pathname,
+      referrer: document.referrer,
+      title: document.title,
+    });
+  }, [location.pathname, tell]);
+
+  return null;
+}
+```
+
+Place `<TellPageTracker />` inside `<TellProvider>` in your root layout. The same pattern works with React Router — just swap `useLocation` for the equivalent hook from your router.
+
+For Next.js, use [`@tell-rs/nextjs`](../nextjs) which handles this automatically.
+
 ## License
 
 MIT
