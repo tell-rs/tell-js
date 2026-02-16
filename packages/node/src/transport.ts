@@ -43,8 +43,19 @@ export class HttpTransport {
     await this.send("/v1/logs", body);
   }
 
+  private resolvePort(): string {
+    try {
+      const u = new URL(this.endpoint);
+      if (u.port) return u.port;
+      return u.protocol === "https:" ? "443" : "80";
+    } catch {
+      return "unknown";
+    }
+  }
+
   private async send(path: string, body: string): Promise<void> {
     const url = `${this.endpoint}${path}`;
+    const port = this.resolvePort();
     const headers: Record<string, string> = {
       "Content-Type": "application/x-ndjson",
       Authorization: `Bearer ${this.apiKey}`,
@@ -107,7 +118,7 @@ export class HttpTransport {
         }
 
         lastError = new NetworkError(
-          `HTTP ${response.status}: ${response.statusText}`,
+          `HTTP ${response.status} from ${url} (port ${port}): ${response.statusText}`,
           response.status
         );
       } catch (err) {
@@ -120,10 +131,16 @@ export class HttpTransport {
           return;
         }
 
-        // DNS failures surface as TypeError from fetch.
-        // These won't resolve by retrying — bail immediately.
+        // DNS failures and connection refused surface as TypeError from
+        // fetch. Include the full URL so the developer can verify the
+        // endpoint and port. These won't resolve by retrying.
         if (err instanceof TypeError) {
-          if (this.onError) this.onError(new NetworkError(err.message));
+          if (this.onError)
+            this.onError(
+              new NetworkError(
+                `Failed to connect to ${url} (port ${port}): ${err.message}`
+              )
+            );
           return;
         }
 

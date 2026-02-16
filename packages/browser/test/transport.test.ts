@@ -18,7 +18,7 @@ describe("BrowserTransport", () => {
     restoreGlobal("navigator");
   });
 
-  it("sends events as NDJSON with auth and keepalive", async () => {
+  it("sends events as NDJSON with token in query param and keepalive", async () => {
     const transport = new BrowserTransport({
       endpoint: "https://collect.example.com",
       apiKey: "a1b2c3d4e5f60718293a4b5c6d7e8f90",
@@ -33,13 +33,15 @@ describe("BrowserTransport", () => {
     await transport.sendEvents(events);
 
     assert.equal(fetchCalls.length, 1);
-    assert.equal(fetchCalls[0].url, "https://collect.example.com/v1/events");
+    assert.ok(fetchCalls[0].url.startsWith("https://collect.example.com/v1/events?token="));
+    assert.ok(fetchCalls[0].url.includes("a1b2c3d4e5f60718293a4b5c6d7e8f90"));
     assert.equal(fetchCalls[0].init.method, "POST");
     assert.equal(fetchCalls[0].init.keepalive, true);
 
+    // text/plain avoids CORS preflight — no Authorization header
     const headers = fetchCalls[0].init.headers as Record<string, string>;
-    assert.equal(headers["Content-Type"], "application/x-ndjson");
-    assert.equal(headers["Authorization"], "Bearer a1b2c3d4e5f60718293a4b5c6d7e8f90");
+    assert.equal(headers["Content-Type"], "text/plain");
+    assert.equal(headers["Authorization"], undefined);
 
     const body = fetchCalls[0].init.body as string;
     const parsed = JSON.parse(body);
@@ -60,7 +62,7 @@ describe("BrowserTransport", () => {
     ];
 
     await transport.sendLogs(logs);
-    assert.equal(fetchCalls[0].url, "https://collect.example.com/v1/logs");
+    assert.ok(fetchCalls[0].url.startsWith("https://collect.example.com/v1/logs?token="));
   });
 
   it("skips empty arrays", async () => {

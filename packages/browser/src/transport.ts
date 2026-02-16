@@ -45,24 +45,37 @@ export class BrowserTransport {
 
     if (events.length > 0) {
       const body = events.map((e) => JSON.stringify(e)).join("\n");
-      const blob = new Blob([body], { type: "application/x-ndjson" });
+      const blob = new Blob([body], { type: "text/plain" });
       const url = `${this.endpoint}/v1/events?token=${encodeURIComponent(this.apiKey)}`;
       navigator.sendBeacon(url, blob);
     }
 
     if (logs.length > 0) {
       const body = logs.map((l) => JSON.stringify(l)).join("\n");
-      const blob = new Blob([body], { type: "application/x-ndjson" });
+      const blob = new Blob([body], { type: "text/plain" });
       const url = `${this.endpoint}/v1/logs?token=${encodeURIComponent(this.apiKey)}`;
       navigator.sendBeacon(url, blob);
     }
   }
 
+  private resolvePort(): string {
+    try {
+      const u = new URL(this.endpoint);
+      if (u.port) return u.port;
+      return u.protocol === "https:" ? "443" : "80";
+    } catch {
+      return "unknown";
+    }
+  }
+
   private async send(path: string, body: string): Promise<void> {
-    const url = `${this.endpoint}${path}`;
+    // Auth via query param + text/plain content-type keeps this a CORS
+    // "simple request" — no preflight OPTIONS needed.  This matches the
+    // pattern used by beacon() and by every major analytics SDK.
+    const url = `${this.endpoint}${path}?token=${encodeURIComponent(this.apiKey)}`;
+    const port = this.resolvePort();
     const headers: Record<string, string> = {
-      "Content-Type": "application/x-ndjson",
-      Authorization: `Bearer ${this.apiKey}`,
+      "Content-Type": "text/plain",
     };
 
     let lastError: Error | undefined;
@@ -74,7 +87,7 @@ export class BrowserTransport {
 
       // Skip attempt if browser reports offline
       if (typeof navigator !== "undefined" && !navigator.onLine) {
-        lastError = new NetworkError("Browser is offline");
+        lastError = new NetworkError(`Browser is offline (endpoint: ${url}, port: ${port})`);
         continue;
       }
 
@@ -129,7 +142,7 @@ export class BrowserTransport {
 
         // 5xx — retryable
         lastError = new NetworkError(
-          `HTTP ${response.status}: ${response.statusText}`,
+          `HTTP ${response.status} from ${url} (port ${port}): ${response.statusText}`,
           response.status
         );
       } catch (err) {
@@ -146,10 +159,16 @@ export class BrowserTransport {
           return;
         }
 
-        // DNS failures and CORS errors surface as TypeError from fetch.
-        // These won't resolve by retrying — bail immediately.
+        // DNS failures, connection refused, and CORS errors surface as
+        // TypeError from fetch. Include the full URL so the developer can
+        // verify the endpoint and port. These won't resolve by retrying.
         if (err instanceof TypeError) {
-          if (this.onError) this.onError(new NetworkError(err.message));
+          if (this.onError)
+            this.onError(
+              new NetworkError(
+                `Failed to connect to ${url} (port ${port}): ${err.message}`
+              )
+            );
           return;
         }
 
