@@ -1,6 +1,6 @@
 {
   "name": "@tell-rs/browser",
-  "version": "0.2.2",
+  "version": "0.2.3",
   "description": "Tell SDK for browsers — analytics events and structured logging",
   "type": "module",
   "main": "./dist/index.cjs",
