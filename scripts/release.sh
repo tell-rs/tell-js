@@ -15,9 +15,23 @@ fi
 
 # ── Preflight ──────────────────────────────────────────────────
 
-if [[ -n "$(git status --porcelain)" ]]; then
-  echo "Working tree is dirty. Commit or stash your changes first."
-  exit 1
+DIRTY_FILES=$(git status --porcelain | awk '{print $2}')
+if [[ -n "$DIRTY_FILES" ]]; then
+  RELEASE_LEFTOVERS=true
+  while IFS= read -r f; do
+    case "$f" in
+      packages/*/package.json|package-lock.json|scripts/release.sh) ;;
+      *) RELEASE_LEFTOVERS=false; break ;;
+    esac
+  done <<< "$DIRTY_FILES"
+
+  if [[ "$RELEASE_LEFTOVERS" == true ]]; then
+    echo "Detected leftover version bumps from a failed release. Resetting..."
+    git checkout -- packages/*/package.json package-lock.json
+  else
+    echo "Working tree is dirty. Commit or stash your changes first."
+    exit 1
+  fi
 fi
 
 echo "Running preflight checks..."
