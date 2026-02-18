@@ -1,6 +1,6 @@
 {
   "name": "@tell-rs/vue",
-  "version": "0.2.3",
+  "version": "0.2.4",
   "description": "Tell SDK Vue integration — plugin and composable",
   "type": "module",
   "main": "./dist/index.cjs",
