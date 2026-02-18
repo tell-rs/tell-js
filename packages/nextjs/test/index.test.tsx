@@ -102,7 +102,6 @@ function trackedProperties(): Record<string, any>[] {
         .split("\n")
         .map((l) => JSON.parse(l))
         .filter((e: any) => e.type === "track" && e.event === "Page Viewed")
-        .map((e: any) => e.properties)
     );
 }
 
