@@ -132,7 +132,8 @@ export class Tell {
       session_id: this.sessionId,
       user_id: userId,
       timestamp: Date.now(),
-      properties: { ...this.superProperties, ...properties },
+      ...this.superProperties,
+      ...properties,
     };
 
     if (this.beforeSend) {
@@ -159,7 +160,7 @@ export class Tell {
       session_id: this.sessionId,
       user_id: userId,
       timestamp: Date.now(),
-      traits,
+      ...traits,
     };
 
     if (this.beforeSend) {
@@ -188,7 +189,8 @@ export class Tell {
       user_id: userId,
       group_id: groupId,
       timestamp: Date.now(),
-      properties: { ...this.superProperties, ...properties },
+      ...this.superProperties,
+      ...properties,
     };
 
     if (this.beforeSend) {
@@ -225,13 +227,11 @@ export class Tell {
       session_id: this.sessionId,
       user_id: userId,
       timestamp: Date.now(),
-      properties: {
-        ...this.superProperties,
-        ...properties,
-        order_id: orderId,
-        amount,
-        currency,
-      },
+      ...this.superProperties,
+      ...properties,
+      order_id: orderId,
+      amount,
+      currency,
     };
 
     if (this.beforeSend) {
@@ -259,7 +259,7 @@ export class Tell {
       session_id: this.sessionId,
       user_id: userId,
       timestamp: Date.now(),
-      properties: { previous_id: previousId },
+      previous_id: previousId,
     };
 
     if (this.beforeSend) {

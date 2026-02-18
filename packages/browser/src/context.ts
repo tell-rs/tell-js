@@ -32,10 +32,9 @@ export function captureContext(): DeviceContext {
     ctx.browser_version = parsed.browserVersion;
     ctx.os_name = parsed.os;
     ctx.os_version = parsed.osVersion;
-    ctx.device_type = inferDeviceType(parsed.os);
     ctx.locale = navigator.language;
 
-    // Hardware capabilities
+    // Hardware capabilities (touch must come before device_type inference)
     if ("hardwareConcurrency" in navigator) {
       ctx.cpu_cores = (navigator as any).hardwareConcurrency;
     }
@@ -45,6 +44,8 @@ export function captureContext(): DeviceContext {
     if ("maxTouchPoints" in navigator) {
       ctx.touch = navigator.maxTouchPoints > 0;
     }
+
+    ctx.device_type = inferDeviceType(parsed.os, ua, ctx.touch);
 
     // Network info (Chrome/Edge)
     const conn = (navigator as any).connection;
@@ -91,8 +92,12 @@ export function captureContext(): DeviceContext {
   return ctx;
 }
 
-function inferDeviceType(os?: string): string {
-  if (os === "iOS" || os === "Android") return "mobile";
+function inferDeviceType(os?: string, ua?: string, touch?: boolean): string {
+  // iPad (iPadOS 13+) reports as macOS but has touch support
+  if (os === "macOS" && touch) return "tablet";
+  // Android tablets have "Android" in UA but not "Mobile"
+  if (os === "Android") return ua && !/Mobile/.test(ua) ? "tablet" : "mobile";
+  if (os === "iOS") return "mobile";
   return "desktop";
 }
 

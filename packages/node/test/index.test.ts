@@ -48,13 +48,13 @@ describe("Tell (Node SDK)", () => {
     assert.equal(event.type, "track");
     assert.equal(event.event, "Page Viewed");
     assert.equal(event.user_id, "u_123");
-    assert.equal(event.properties.url, "/home");
+    assert.equal(event.url, "/home");
     assert.ok(event.device_id);
     assert.ok(event.session_id);
     assert.ok(event.timestamp);
   });
 
-  it("identify sends traits", async () => {
+  it("identify sends traits as flat fields", async () => {
     client = new Tell({ apiKey: API_KEY });
 
     client.identify("u_456", { name: "Jane", plan: "pro" });
@@ -64,7 +64,8 @@ describe("Tell (Node SDK)", () => {
     const event = JSON.parse(fetchCalls[0].body);
     assert.equal(event.type, "identify");
     assert.equal(event.user_id, "u_456");
-    assert.equal(event.traits.name, "Jane");
+    assert.equal(event.name, "Jane");
+    assert.equal(event.plan, "pro");
   });
 
   it("group sends groupId", async () => {
@@ -88,9 +89,9 @@ describe("Tell (Node SDK)", () => {
     const event = JSON.parse(fetchCalls[0].body);
     assert.equal(event.type, "track");
     assert.equal(event.event, "Order Completed");
-    assert.equal(event.properties.amount, 49.99);
-    assert.equal(event.properties.currency, "USD");
-    assert.equal(event.properties.order_id, "ord_123");
+    assert.equal(event.amount, 49.99);
+    assert.equal(event.currency, "USD");
+    assert.equal(event.order_id, "ord_123");
   });
 
   it("alias sends previous_id in properties", async () => {
@@ -102,7 +103,7 @@ describe("Tell (Node SDK)", () => {
     const event = JSON.parse(fetchCalls[0].body);
     assert.equal(event.type, "alias");
     assert.equal(event.user_id, "u_1");
-    assert.equal(event.properties.previous_id, "anon_1");
+    assert.equal(event.previous_id, "anon_1");
   });
 
   it("log sends to /v1/logs", async () => {
@@ -144,9 +145,9 @@ describe("Tell (Node SDK)", () => {
     await client.flush();
 
     const event = JSON.parse(fetchCalls[0].body);
-    assert.equal(event.properties.app_version, "2.0");
-    assert.equal(event.properties.env, "prod");
-    assert.equal(event.properties.button, "save");
+    assert.equal(event.app_version, "2.0");
+    assert.equal(event.env, "prod");
+    assert.equal(event.button, "save");
   });
 
   it("event properties override super properties", async () => {
@@ -157,7 +158,7 @@ describe("Tell (Node SDK)", () => {
     await client.flush();
 
     const event = JSON.parse(fetchCalls[0].body);
-    assert.equal(event.properties.env, "staging");
+    assert.equal(event.env, "staging");
   });
 
   it("unregister removes a super property", async () => {
@@ -169,8 +170,8 @@ describe("Tell (Node SDK)", () => {
     await client.flush();
 
     const event = JSON.parse(fetchCalls[0].body);
-    assert.equal(event.properties.env, undefined);
-    assert.equal(event.properties.version, "1.0");
+    assert.equal(event.env, undefined);
+    assert.equal(event.version, "1.0");
   });
 
   it("close flushes and stops", async () => {
@@ -309,17 +310,14 @@ describe("Tell (Node SDK)", () => {
   it("beforeSend modifies events", async () => {
     client = new Tell({
       apiKey: API_KEY,
-      beforeSend: (event) => ({
-        ...event,
-        properties: { ...event.properties, injected: true },
-      }),
+      beforeSend: (event) => ({ ...event, injected: true }),
     });
 
     client.track("u_1", "Click");
     await client.flush();
 
     const event = JSON.parse(fetchCalls[0].body);
-    assert.equal(event.properties.injected, true);
+    assert.equal(event.injected, true);
   });
 
   it("beforeSend drops events by returning null", async () => {
@@ -341,14 +339,8 @@ describe("Tell (Node SDK)", () => {
     client = new Tell({
       apiKey: API_KEY,
       beforeSend: [
-        (event) => ({
-          ...event,
-          properties: { ...event.properties, step1: true },
-        }),
-        (event) => ({
-          ...event,
-          properties: { ...event.properties, step2: true },
-        }),
+        (event) => ({ ...event, step1: true }),
+        (event) => ({ ...event, step2: true }),
       ],
     });
 
@@ -356,8 +348,8 @@ describe("Tell (Node SDK)", () => {
     await client.flush();
 
     const event = JSON.parse(fetchCalls[0].body);
-    assert.equal(event.properties.step1, true);
-    assert.equal(event.properties.step2, true);
+    assert.equal(event.step1, true);
+    assert.equal(event.step2, true);
   });
 
   // --- New tests: beforeSendLog ---

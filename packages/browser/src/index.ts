@@ -126,7 +126,8 @@ function onNewSession(reason: SessionReason, sessionId: string): void {
     session_id: sessionId,
     user_id: userId,
     timestamp: Date.now(),
-    context: { reason, ...ctx } as unknown as Properties,
+    reason,
+    ...ctx,
   };
   eventBatcher.add(event);
 }
@@ -354,7 +355,8 @@ const tell: TellInstance = {
       session_id: sessionManager.sessionId,
       user_id: userId,
       timestamp: Date.now(),
-      properties: { ...superProperties, ...properties },
+      ...superProperties,
+      ...properties,
     };
 
     if (beforeSend) {
@@ -392,7 +394,7 @@ const tell: TellInstance = {
       session_id: sessionManager.sessionId,
       user_id: userId,
       timestamp: Date.now(),
-      traits,
+      ...traits,
     };
 
     if (beforeSend) {
@@ -428,7 +430,8 @@ const tell: TellInstance = {
       user_id: userId,
       group_id: groupId,
       timestamp: Date.now(),
-      properties: { ...superProperties, ...properties },
+      ...superProperties,
+      ...properties,
     };
 
     if (beforeSend) {
@@ -471,13 +474,11 @@ const tell: TellInstance = {
       session_id: sessionManager.sessionId,
       user_id: userId,
       timestamp: Date.now(),
-      properties: {
-        ...superProperties,
-        ...properties,
-        order_id: orderId,
-        amount,
-        currency,
-      },
+      ...superProperties,
+      ...properties,
+      order_id: orderId,
+      amount,
+      currency,
     };
 
     if (beforeSend) {
@@ -514,7 +515,7 @@ const tell: TellInstance = {
       session_id: sessionManager.sessionId,
       user_id: newUserId,
       timestamp: Date.now(),
-      properties: { previous_id: previousId },
+      previous_id: previousId,
     };
 
     if (beforeSend) {

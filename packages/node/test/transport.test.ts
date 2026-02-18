@@ -48,14 +48,14 @@ describe("HttpTransport", () => {
         device_id: "dev-1",
         session_id: "sess-1",
         timestamp: 1706000000000,
-        properties: { url: "/home" },
+        url: "/home",
       },
       {
         type: "identify",
         device_id: "dev-1",
         user_id: "u_123",
         timestamp: 1706000000001,
-        traits: { name: "Jane" },
+        name: "Jane",
       },
     ];
 

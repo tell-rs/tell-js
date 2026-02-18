@@ -17,11 +17,11 @@ export const SENSITIVE_PARAMS: readonly string[] = [
 ] as const;
 
 export interface RedactOptions {
-  /** Query-parameter names to strip from URLs (context.url and URL-shaped property values). */
+  /** Query-parameter names to strip from URL-shaped values. */
   stripParams?: string[];
-  /** Property/trait keys whose values should be replaced with "[REDACTED]". */
+  /** Keys whose values should be replaced with "[REDACTED]". */
   redactKeys?: string[];
-  /** URL pathname prefixes — events whose context.url matches are dropped entirely. */
+  /** URL pathname prefixes — events whose url matches are dropped entirely. */
   dropRoutes?: string[];
 }
 
@@ -37,22 +37,6 @@ function stripUrlParams(url: string, params: string[]): string {
   } catch {
     return url; // not a valid URL — leave as-is
   }
-}
-
-function stripParamsInProperties(
-  props: Properties | undefined,
-  params: string[],
-): Properties | undefined {
-  if (!props) return props;
-  const out: Properties = {};
-  for (const [k, v] of Object.entries(props)) {
-    if (typeof v === "string" && v.startsWith("http")) {
-      out[k] = stripUrlParams(v, params);
-    } else {
-      out[k] = v;
-    }
-  }
-  return out;
 }
 
 function redactKeysInProperties(
@@ -74,10 +58,9 @@ function redactKeysInProperties(
 /**
  * Factory that returns a `beforeSend` hook for events.
  *
- * - `dropRoutes` — drops events whose `context.url` pathname starts with a prefix.
- * - `stripParams` — removes query params from `context.url` and URL-shaped values
- *   in `properties` and `traits`.
- * - `redactKeys` — replaces matching keys in `properties` and `traits` with `"[REDACTED]"`.
+ * - `dropRoutes` — drops events whose `url` pathname starts with a prefix.
+ * - `stripParams` — removes query params from URL-shaped string values.
+ * - `redactKeys` — replaces matching keys with `"[REDACTED]"`.
  *
  * The returned function never mutates the input event.
  */
@@ -86,9 +69,9 @@ export function redact(options: RedactOptions): BeforeSendFn<JsonEvent> {
 
   return (event: JsonEvent): JsonEvent | null => {
     // --- dropRoutes ---
-    if (dropRoutes && dropRoutes.length > 0 && event.context?.url) {
+    if (dropRoutes && dropRoutes.length > 0 && event.url) {
       try {
-        const pathname = new URL(String(event.context.url)).pathname;
+        const pathname = new URL(String(event.url)).pathname;
         for (const prefix of dropRoutes) {
           if (pathname.startsWith(prefix)) return null;
         }
@@ -97,31 +80,32 @@ export function redact(options: RedactOptions): BeforeSendFn<JsonEvent> {
       }
     }
 
-    let ctx = event.context;
-    let props = event.properties;
-    let traits = event.traits;
+    let result: JsonEvent = event;
 
     // --- stripParams ---
     if (stripParams && stripParams.length > 0) {
-      if (ctx?.url && typeof ctx.url === "string") {
-        ctx = { ...ctx, url: stripUrlParams(ctx.url, stripParams) };
+      for (const [k, v] of Object.entries(event)) {
+        if (typeof v === "string" && v.startsWith("http")) {
+          const stripped = stripUrlParams(v, stripParams);
+          if (stripped !== v) {
+            if (result === event) result = { ...event };
+            result[k] = stripped;
+          }
+        }
       }
-      props = stripParamsInProperties(props, stripParams);
-      traits = stripParamsInProperties(traits, stripParams);
     }
 
     // --- redactKeys ---
     if (redactKeys && redactKeys.length > 0) {
-      props = redactKeysInProperties(props, redactKeys);
-      traits = redactKeysInProperties(traits, redactKeys);
+      for (const [k, v] of Object.entries(event)) {
+        if (redactKeys.includes(k)) {
+          if (result === event) result = { ...event };
+          result[k] = "[REDACTED]";
+        }
+      }
     }
 
-    // Return a shallow copy if anything changed
-    if (ctx !== event.context || props !== event.properties || traits !== event.traits) {
-      return { ...event, context: ctx, properties: props, traits: traits };
-    }
-
-    return event;
+    return result;
   };
 }
 

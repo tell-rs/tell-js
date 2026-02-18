@@ -16,74 +16,61 @@ function makeEvent(overrides: Partial<JsonEvent> = {}): JsonEvent {
 }
 
 describe("redact", () => {
-  it("stripParams strips token from context.url", () => {
+  it("stripParams strips token from url", () => {
     const fn = redact({ stripParams: ["token"] });
-    const event = makeEvent({
-      context: { url: "https://example.com/page?token=abc&tab=1" },
-    });
+    const event = makeEvent({ url: "https://example.com/page?token=abc&tab=1" });
     const result = fn(event)!;
-    assert.equal(result.context!.url, "https://example.com/page?tab=1");
+    assert.equal(result.url, "https://example.com/page?tab=1");
   });
 
-  it("stripParams strips from URL-shaped property values", () => {
+  it("stripParams strips from URL-shaped values", () => {
     const fn = redact({ stripParams: ["api_key"] });
     const event = makeEvent({
-      properties: {
-        link: "https://example.com/callback?api_key=secret123&page=2",
-        name: "test",
-      },
+      link: "https://example.com/callback?api_key=secret123&page=2",
+      name: "test",
     });
     const result = fn(event)!;
-    assert.equal(
-      result.properties!.link,
-      "https://example.com/callback?page=2",
-    );
+    assert.equal(result.link, "https://example.com/callback?page=2");
   });
 
-  it("stripParams leaves non-URL property values untouched", () => {
+  it("stripParams leaves non-URL values untouched", () => {
     const fn = redact({ stripParams: ["token"] });
-    const event = makeEvent({
-      properties: { label: "my-token-value", count: 42 },
-    });
+    const event = makeEvent({ label: "my-token-value", count: 42 });
     const result = fn(event)!;
-    assert.equal(result.properties!.label, "my-token-value");
-    assert.equal(result.properties!.count, 42);
+    assert.equal(result.label, "my-token-value");
+    assert.equal(result.count, 42);
   });
 
-  it("redactKeys replaces matching key in properties with [REDACTED]", () => {
+  it("redactKeys replaces matching key with [REDACTED]", () => {
     const fn = redact({ redactKeys: ["email"] });
-    const event = makeEvent({
-      properties: { email: "jane@example.com", plan: "pro" },
-    });
+    const event = makeEvent({ email: "jane@example.com", plan: "pro" });
     const result = fn(event)!;
-    assert.equal(result.properties!.email, "[REDACTED]");
-    assert.equal(result.properties!.plan, "pro");
+    assert.equal(result.email, "[REDACTED]");
+    assert.equal(result.plan, "pro");
   });
 
-  it("redactKeys replaces matching key in traits with [REDACTED]", () => {
+  it("redactKeys works on identify events", () => {
     const fn = redact({ redactKeys: ["ssn"] });
     const event = makeEvent({
-      traits: { ssn: "123-45-6789", name: "Jane" },
+      type: "identify",
+      ssn: "123-45-6789",
+      name: "Jane",
     });
     const result = fn(event)!;
-    assert.equal(result.traits!.ssn, "[REDACTED]");
-    assert.equal(result.traits!.name, "Jane");
+    assert.equal(result.ssn, "[REDACTED]");
+    assert.equal(result.name, "Jane");
   });
 
   it("dropRoutes returns null for matching URL pathname prefix", () => {
     const fn = redact({ dropRoutes: ["/internal", "/health"] });
-    const event = makeEvent({
-      context: { url: "https://example.com/internal/debug?x=1" },
-    });
+    const event = makeEvent({ url: "https://example.com/internal/debug?x=1" });
     const result = fn(event);
     assert.equal(result, null);
   });
 
   it("dropRoutes passes through non-matching URLs", () => {
     const fn = redact({ dropRoutes: ["/internal"] });
-    const event = makeEvent({
-      context: { url: "https://example.com/dashboard?q=search" },
-    });
+    const event = makeEvent({ url: "https://example.com/dashboard?q=search" });
     const result = fn(event);
     assert.notEqual(result, null);
     assert.equal(result!.event, "Page Viewed");
@@ -97,28 +84,24 @@ describe("redact", () => {
     });
 
     // Should be dropped
-    const adminEvent = makeEvent({
-      context: { url: "https://example.com/admin/settings" },
-    });
+    const adminEvent = makeEvent({ url: "https://example.com/admin/settings" });
     assert.equal(fn(adminEvent), null);
 
     // Should strip + redact
     const normalEvent = makeEvent({
-      context: { url: "https://example.com/page?token=abc" },
-      properties: { email: "jane@test.com", page: "/home" },
+      url: "https://example.com/page?token=abc",
+      email: "jane@test.com",
+      page: "/home",
     });
     const result = fn(normalEvent)!;
-    assert.equal(result.context!.url, "https://example.com/page");
-    assert.equal(result.properties!.email, "[REDACTED]");
-    assert.equal(result.properties!.page, "/home");
+    assert.equal(result.url, "https://example.com/page");
+    assert.equal(result.email, "[REDACTED]");
+    assert.equal(result.page, "/home");
   });
 
   it("empty options pass events through unchanged", () => {
     const fn = redact({});
-    const event = makeEvent({
-      context: { url: "https://example.com?secret=123" },
-      properties: { email: "test@test.com" },
-    });
+    const event = makeEvent({ url: "https://example.com?secret=123", email: "test@test.com" });
     const result = fn(event);
     // Should be the exact same object reference (no copy needed)
     assert.equal(result, event);

@@ -54,7 +54,7 @@ describe("tell (browser singleton)", () => {
       (b: any) => b.type === "track" && b.event === "Page Viewed"
     );
     assert.ok(trackEvent);
-    assert.equal(trackEvent.properties.url, "/home");
+    assert.equal(trackEvent.url, "/home");
 
     const identifyEvent = bodies.find((b: any) => b.type === "identify");
     assert.ok(identifyEvent);
@@ -75,7 +75,7 @@ describe("tell (browser singleton)", () => {
       (b: any) => b.type === "track" && b.event === "Button Clicked"
     );
     assert.ok(event);
-    assert.equal(event.properties.button, "save");
+    assert.equal(event.button, "save");
     assert.ok(event.device_id);
     assert.ok(event.session_id);
     assert.ok(event.timestamp);
@@ -137,9 +137,9 @@ describe("tell (browser singleton)", () => {
     );
     const event = bodies.find((b: any) => b.event === "Order Completed");
     assert.ok(event);
-    assert.equal(event.properties.amount, 49.99);
-    assert.equal(event.properties.currency, "USD");
-    assert.equal(event.properties.order_id, "ord_1");
+    assert.equal(event.amount, 49.99);
+    assert.equal(event.currency, "USD");
+    assert.equal(event.order_id, "ord_1");
   });
 
   // --- Alias ---
@@ -155,7 +155,7 @@ describe("tell (browser singleton)", () => {
     const event = bodies.find((b: any) => b.type === "alias");
     assert.ok(event);
     assert.equal(event.user_id, "u_1");
-    assert.equal(event.properties.previous_id, "anon_1");
+    assert.equal(event.previous_id, "anon_1");
   });
 
   // --- Logging ---
@@ -324,10 +324,7 @@ describe("tell (browser singleton)", () => {
   it("beforeSend modifies events", async () => {
     tell.configure(API_KEY, {
       botDetection: false,
-      beforeSend: (event) => ({
-        ...event,
-        properties: { ...event.properties, injected: true },
-      }),
+      beforeSend: (event) => ({ ...event, injected: true }),
     });
 
     tell.track("Click");
@@ -337,7 +334,7 @@ describe("tell (browser singleton)", () => {
       (c.init.body as string).split("\n").map((l) => JSON.parse(l))
     );
     const event = bodies.find((b: any) => b.event === "Click");
-    assert.equal(event?.properties.injected, true);
+    assert.equal(event?.injected, true);
   });
 
   it("beforeSend drops events by returning null", async () => {
@@ -407,9 +404,9 @@ describe("tell (browser singleton)", () => {
       (c.init.body as string).split("\n").map((l) => JSON.parse(l))
     );
     const event = bodies.find((b: any) => b.event === "Click");
-    assert.equal(event?.properties.env, "prod");
-    assert.equal(event?.properties.version, "2.0");
-    assert.equal(event?.properties.button, "save");
+    assert.equal(event?.env, "prod");
+    assert.equal(event?.version, "2.0");
+    assert.equal(event?.button, "save");
   });
 
   it("event properties override super properties", async () => {
@@ -422,7 +419,7 @@ describe("tell (browser singleton)", () => {
       (c.init.body as string).split("\n").map((l) => JSON.parse(l))
     );
     const event = bodies.find((b: any) => b.event === "Click");
-    assert.equal(event?.properties.env, "staging");
+    assert.equal(event?.env, "staging");
   });
 
   it("unregister removes a super property", async () => {
@@ -436,8 +433,8 @@ describe("tell (browser singleton)", () => {
       (c.init.body as string).split("\n").map((l) => JSON.parse(l))
     );
     const event = bodies.find((b: any) => b.event === "Click");
-    assert.equal(event?.properties.env, undefined);
-    assert.equal(event?.properties.version, "1.0");
+    assert.equal(event?.env, undefined);
+    assert.equal(event?.version, "1.0");
   });
 
   // --- flush before configure ---
@@ -468,8 +465,8 @@ describe("tell (browser singleton)", () => {
       (c.init.body as string).split("\n").map((l) => JSON.parse(l))
     );
     const event = bodies.find((b: any) => b.event === "Click");
-    assert.equal(event?.properties.utm_source, "google");
-    assert.equal(event?.properties.utm_medium, "cpc");
+    assert.equal(event?.utm_source, "google");
+    assert.equal(event?.utm_medium, "cpc");
   });
 
   // --- Error auto-capture ---
@@ -519,7 +516,7 @@ describe("tell (browser singleton)", () => {
 
   // --- context event structure ---
 
-  it("context event has reason inside context object", async () => {
+  it("context event has reason as flat field", async () => {
     tell.configure(API_KEY, { botDetection: false });
     await tell.flush();
 
@@ -528,7 +525,7 @@ describe("tell (browser singleton)", () => {
     );
     const ctx = bodies.find((b: any) => b.type === "context");
     assert.ok(ctx, "expected a context event");
-    assert.equal(ctx.context.reason, "session_start");
-    assert.equal(ctx.properties, undefined);
+    assert.equal(ctx.reason, "session_start");
+    assert.equal(ctx.context, undefined);
   });
 });

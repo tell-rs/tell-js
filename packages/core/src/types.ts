@@ -24,6 +24,7 @@ export type LogLevel =
   | "trace";
 
 // Wire format: JSON event line sent to POST /v1/events
+// Protocol fields are typed; user data is flat alongside them.
 export interface JsonEvent {
   type: EventType;
   event?: string;
@@ -32,9 +33,7 @@ export interface JsonEvent {
   user_id?: string;
   group_id?: string;
   timestamp?: number;
-  properties?: Properties;
-  traits?: Properties;
-  context?: Properties;
+  [key: string]: string | number | boolean | null | undefined;
 }
 
 // Wire format: JSON log line sent to POST /v1/logs
