@@ -1,21 +1,15 @@
-/** Generate a UUID v4 string using crypto.getRandomValues. */
+/** Generate a 32-char hex ID (16 random bytes) using crypto.getRandomValues. */
 export function generateId(): string {
   if (typeof crypto !== "undefined" && crypto.getRandomValues) {
     const bytes = new Uint8Array(16);
     crypto.getRandomValues(bytes);
-    // Set version (4) and variant (10xx)
-    bytes[6] = (bytes[6] & 0x0f) | 0x40;
-    bytes[8] = (bytes[8] & 0x3f) | 0x80;
-    const hex = Array.from(bytes, (b) => b.toString(16).padStart(2, "0")).join(
-      ""
-    );
-    return `${hex.slice(0, 8)}-${hex.slice(8, 12)}-${hex.slice(12, 16)}-${hex.slice(16, 20)}-${hex.slice(20)}`;
+    return Array.from(bytes, (b) => b.toString(16).padStart(2, "0")).join("");
   }
 
   // Fallback for environments without crypto (extremely rare)
-  return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, (c) => {
-    const r = (Math.random() * 16) | 0;
-    const v = c === "x" ? r : (r & 0x3) | 0x8;
-    return v.toString(16);
-  });
+  let hex = "";
+  for (let i = 0; i < 32; i++) {
+    hex += ((Math.random() * 16) | 0).toString(16);
+  }
+  return hex;
 }

@@ -348,6 +348,8 @@ const tell: TellInstance = {
       return;
     }
 
+    sessionManager.touch();
+
     let event: JsonEvent | null = {
       type: "track",
       event: eventName,
@@ -364,7 +366,6 @@ const tell: TellInstance = {
       if (event === null) return;
     }
 
-    sessionManager.touch();
     eventBatcher.add(event);
   },
 
@@ -388,6 +389,8 @@ const tell: TellInstance = {
     userId = newUserId;
     storage.set(STORAGE_KEYS.USER_ID, userId);
 
+    sessionManager.touch();
+
     let event: JsonEvent | null = {
       type: "identify",
       device_id: deviceId,
@@ -402,7 +405,6 @@ const tell: TellInstance = {
       if (event === null) return;
     }
 
-    sessionManager.touch();
     eventBatcher.add(event);
   },
 
@@ -423,6 +425,8 @@ const tell: TellInstance = {
       return;
     }
 
+    sessionManager.touch();
+
     let event: JsonEvent | null = {
       type: "group",
       device_id: deviceId,
@@ -439,7 +443,6 @@ const tell: TellInstance = {
       if (event === null) return;
     }
 
-    sessionManager.touch();
     eventBatcher.add(event);
   },
 
@@ -467,6 +470,8 @@ const tell: TellInstance = {
       return;
     }
 
+    sessionManager.touch();
+
     let event: JsonEvent | null = {
       type: "track",
       event: "Order Completed",
@@ -486,7 +491,6 @@ const tell: TellInstance = {
       if (event === null) return;
     }
 
-    sessionManager.touch();
     eventBatcher.add(event);
   },
 
@@ -509,6 +513,8 @@ const tell: TellInstance = {
       return;
     }
 
+    sessionManager.touch();
+
     let event: JsonEvent | null = {
       type: "alias",
       device_id: deviceId,
@@ -523,7 +529,6 @@ const tell: TellInstance = {
       if (event === null) return;
     }
 
-    sessionManager.touch();
     eventBatcher.add(event);
   },
 

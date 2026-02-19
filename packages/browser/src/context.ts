@@ -16,9 +16,16 @@ export interface DeviceContext {
   url?: string;
   title?: string;
   connection_type?: string;
+  downlink?: number;
+  rtt?: number;
+  save_data?: boolean;
   cpu_cores?: number;
   device_memory?: number;
   touch?: boolean;
+  bot?: boolean;
+  dark_mode?: boolean;
+  path?: string;
+  screen_orientation?: string;
 }
 
 /** Capture a snapshot of the current device/browser context. */
@@ -49,14 +56,22 @@ export function captureContext(): DeviceContext {
 
     // Network info (Chrome/Edge)
     const conn = (navigator as any).connection;
-    if (conn?.effectiveType) {
-      ctx.connection_type = conn.effectiveType;
+    if (conn) {
+      if (conn.effectiveType) ctx.connection_type = conn.effectiveType;
+      if (typeof conn.downlink === "number") ctx.downlink = conn.downlink;
+      if (typeof conn.rtt === "number") ctx.rtt = conn.rtt;
+      if (conn.saveData) ctx.save_data = true;
     }
+
+    // Bot detection
+    if ((navigator as any).webdriver) ctx.bot = true;
   }
 
   if (typeof screen !== "undefined") {
     ctx.screen_width = screen.width;
     ctx.screen_height = screen.height;
+    const orient = (screen as any).orientation;
+    if (orient?.type) ctx.screen_orientation = orient.type;
   }
 
   if (typeof window !== "undefined") {
@@ -81,12 +96,21 @@ export function captureContext(): DeviceContext {
 
   if (typeof location !== "undefined") {
     ctx.url = location.href;
+    if (location.pathname) ctx.path = location.pathname;
   }
 
   try {
     ctx.timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
   } catch {
     // Intl not available
+  }
+
+  if (typeof window !== "undefined" && window.matchMedia) {
+    try {
+      ctx.dark_mode = window.matchMedia("(prefers-color-scheme: dark)").matches;
+    } catch {
+      // matchMedia not available
+    }
   }
 
   return ctx;

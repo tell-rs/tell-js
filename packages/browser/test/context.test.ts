@@ -18,10 +18,10 @@ describe("captureContext", () => {
       maxTouchPoints: 0,
       hardwareConcurrency: 10,
     });
-    setGlobal("screen", { width: 2560, height: 1440 });
+    setGlobal("screen", { width: 2560, height: 1440, orientation: { type: "landscape-primary" } });
     setGlobal("window", { innerWidth: 1280, innerHeight: 720, devicePixelRatio: 2 });
     setGlobal("document", { referrer: "https://google.com", title: "Test" });
-    setGlobal("location", { href: "https://example.com/page" });
+    setGlobal("location", { href: "https://example.com/page", pathname: "/page" });
 
     const ctx = captureContext();
     assert.equal(ctx.browser, "Chrome");
@@ -34,9 +34,12 @@ describe("captureContext", () => {
     assert.equal(ctx.referrer, "https://google.com");
     assert.equal(ctx.referrer_domain, "google.com");
     assert.equal(ctx.url, "https://example.com/page");
+    assert.equal(ctx.path, "/page");
     assert.equal(ctx.locale, "en-US");
     assert.equal(ctx.cpu_cores, 10);
     assert.equal(ctx.touch, false);
+    assert.equal(ctx.screen_orientation, "landscape-primary");
+    assert.equal(ctx.bot, undefined);
   });
 
   it("parses Firefox UA", () => {
@@ -123,6 +126,47 @@ describe("captureContext", () => {
     const ctx = captureContext();
     assert.equal(ctx.os_name, "Android");
     assert.equal(ctx.device_type, "mobile");
+  });
+
+  it("detects bot via navigator.webdriver", () => {
+    setGlobal("navigator", {
+      userAgent:
+        "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 Chrome/120.0.0.0 Safari/537.36",
+      language: "en",
+      webdriver: true,
+    });
+    const ctx = captureContext();
+    assert.equal(ctx.bot, true);
+  });
+
+  it("captures network quality fields", () => {
+    setGlobal("navigator", {
+      userAgent: "Mozilla/5.0 Chrome/120.0.0.0",
+      language: "en",
+      connection: {
+        effectiveType: "4g",
+        downlink: 10.5,
+        rtt: 50,
+        saveData: true,
+      },
+    });
+    const ctx = captureContext();
+    assert.equal(ctx.connection_type, "4g");
+    assert.equal(ctx.downlink, 10.5);
+    assert.equal(ctx.rtt, 50);
+    assert.equal(ctx.save_data, true);
+  });
+
+  it("captures dark mode preference", () => {
+    setGlobal("window", {
+      innerWidth: 1280,
+      innerHeight: 720,
+      matchMedia: (query: string) => ({
+        matches: query === "(prefers-color-scheme: dark)",
+      }),
+    });
+    const ctx = captureContext();
+    assert.equal(ctx.dark_mode, true);
   });
 
   it("returns empty object when globals are missing", () => {

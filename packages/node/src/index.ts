@@ -22,7 +22,7 @@ const LOG_LEVELS: Record<string, number> = {
 };
 
 function uuid(): string {
-  return crypto.randomUUID();
+  return crypto.randomUUID().replace(/-/g, "");
 }
 
 export class Tell {

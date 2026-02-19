@@ -2,13 +2,12 @@ import { describe, it } from "node:test";
 import assert from "node:assert/strict";
 import { generateId } from "../src/id.js";
 
-const UUID_V4 =
-  /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/;
+const HEX_32 = /^[0-9a-f]{32}$/;
 
 describe("generateId", () => {
-  it("returns a valid UUID v4", () => {
+  it("returns a 32-char hex string", () => {
     const id = generateId();
-    assert.match(id, UUID_V4);
+    assert.match(id, HEX_32);
   });
 
   it("returns unique values", () => {

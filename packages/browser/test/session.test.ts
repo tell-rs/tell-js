@@ -84,6 +84,27 @@ describe("SessionManager", () => {
     sm.destroy();
   });
 
+  it("touch rotates session when idle longer than timeout", () => {
+    const reasons: string[] = [];
+    const sm = new SessionManager({
+      timeout: 50,
+      onNewSession: (r: string) => reasons.push(r),
+    });
+
+    const firstSession = sm.sessionId;
+    reasons.length = 0;
+
+    const start = Date.now();
+    while (Date.now() - start < 60) {
+      // busy wait past timeout
+    }
+
+    sm.touch();
+    assert.equal(reasons[0], "session_timeout");
+    assert.notEqual(sm.sessionId, firstSession);
+    sm.destroy();
+  });
+
   it("destroy removes listeners", () => {
     const reasons: string[] = [];
     const sm = new SessionManager({

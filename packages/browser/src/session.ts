@@ -14,7 +14,6 @@ export class SessionManager {
   private readonly timeout: number;
   private readonly onNewSession: (reason: SessionReason, sessionId: string) => void;
   private readonly visibilityHandler: () => void;
-  private readonly checkTimer: ReturnType<typeof setInterval>;
   private lastContextAt: Record<string, number> = {};
 
   constructor(config: SessionManagerConfig) {
@@ -29,11 +28,6 @@ export class SessionManager {
     if (typeof document !== "undefined") {
       document.addEventListener("visibilitychange", this.visibilityHandler);
     }
-
-    this.checkTimer = setInterval(() => this.checkTimeout(), 60_000);
-    if (typeof (this.checkTimer as any).unref === "function") {
-      (this.checkTimer as any).unref();
-    }
   }
 
   get sessionId(): string {
@@ -44,15 +38,19 @@ export class SessionManager {
     this._sessionId = id;
   }
 
+  /** Update activity timestamp; rotates session if idle longer than timeout. */
   touch(): void {
-    this.lastActivityAt = Date.now();
+    const now = Date.now();
+    if (now - this.lastActivityAt > this.timeout) {
+      this.rotateSession("session_timeout");
+    }
+    this.lastActivityAt = now;
   }
 
   destroy(): void {
     if (typeof document !== "undefined") {
       document.removeEventListener("visibilitychange", this.visibilityHandler);
     }
-    clearInterval(this.checkTimer);
   }
 
   private handleVisibility(): void {
@@ -65,12 +63,6 @@ export class SessionManager {
         this.emitContext("app_foreground");
       }
       this.lastHiddenAt = 0;
-    }
-  }
-
-  private checkTimeout(): void {
-    if (Date.now() - this.lastActivityAt > this.timeout) {
-      this.rotateSession("session_timeout");
     }
   }
 
