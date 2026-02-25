@@ -65,6 +65,7 @@ let sessionManager: SessionManager;
 let resolvedConfig: ResolvedBrowserConfig;
 
 let _apiKey: string;
+let resolvedService: string;
 let deviceId: string;
 let userId: string | undefined;
 let superProperties: Properties = {};
@@ -122,6 +123,7 @@ function onNewSession(reason: SessionReason, sessionId: string): void {
   const ctx = captureContext();
   const event: JsonEvent = {
     type: "context",
+    service: resolvedService,
     device_id: deviceId,
     session_id: sessionId,
     user_id: userId,
@@ -206,6 +208,10 @@ const tell: TellInstance = {
     validateApiKey(apiKey);
     _apiKey = apiKey;
     resolvedConfig = resolveConfig(options);
+    resolvedService =
+      options?.service ??
+      (typeof window !== "undefined" ? window.location?.hostname : undefined) ??
+      "browser";
     sdkLogLevel = LOG_LEVELS[resolvedConfig.logLevel] ?? 0;
     beforeSend = resolvedConfig.beforeSend;
     beforeSendLog = resolvedConfig.beforeSendLog;
@@ -353,6 +359,7 @@ const tell: TellInstance = {
     let event: JsonEvent | null = {
       type: "track",
       event: eventName,
+      service: resolvedService,
       device_id: deviceId,
       session_id: sessionManager.sessionId,
       user_id: userId,
@@ -393,6 +400,7 @@ const tell: TellInstance = {
 
     let event: JsonEvent | null = {
       type: "identify",
+      service: resolvedService,
       device_id: deviceId,
       session_id: sessionManager.sessionId,
       user_id: userId,
@@ -429,6 +437,7 @@ const tell: TellInstance = {
 
     let event: JsonEvent | null = {
       type: "group",
+      service: resolvedService,
       device_id: deviceId,
       session_id: sessionManager.sessionId,
       user_id: userId,
@@ -475,6 +484,7 @@ const tell: TellInstance = {
     let event: JsonEvent | null = {
       type: "track",
       event: "Order Completed",
+      service: resolvedService,
       device_id: deviceId,
       session_id: sessionManager.sessionId,
       user_id: userId,
@@ -517,6 +527,7 @@ const tell: TellInstance = {
 
     let event: JsonEvent | null = {
       type: "alias",
+      service: resolvedService,
       device_id: deviceId,
       session_id: sessionManager.sessionId,
       user_id: newUserId,
@@ -562,7 +573,7 @@ const tell: TellInstance = {
       level,
       message,
       source: resolvedConfig.source,
-      service: service ?? "app",
+      service: service ?? resolvedService,
       session_id: sessionManager.sessionId,
       timestamp: Date.now(),
       data,

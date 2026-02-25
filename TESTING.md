@@ -1,5 +1,14 @@
 # Testing
 
+## E2E tests
+
+Requires a Tell server running on localhost:8080.
+
+    npm run test:e2e
+
+Set the TELL_E2E=1 env var if running individual package tests directly.
+
+
 ## Unit tests
 
     npm test
@@ -13,16 +22,6 @@ react, nextjs, and vue are stubs.
     npm run typecheck
 
 Runs `tsc --noEmit` in every package.
-
-
-## E2E tests
-
-Requires a Tell server running on localhost:8080.
-
-    npm run test:e2e
-
-Set the TELL_E2E=1 env var if running individual package tests directly.
-
 
 ## Full preflight (what the release script runs)
 

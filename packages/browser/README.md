@@ -46,6 +46,7 @@ Initialize the SDK. Call once on page load.
 ```ts
 tell.configure("your-api-key", {
   // All options below are optional:
+  service: "landing-page",                // stamped on every event and log (defaults to window.location.hostname)
   endpoint: "https://collect.tell.app",  // default
   batchSize: 20,                          // events per batch
   flushInterval: 5_000,                   // ms between auto-flushes

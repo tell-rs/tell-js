@@ -33,6 +33,7 @@ export class Tell {
   private sessionId: string;
   private readonly onError?: (error: Error) => void;
   private readonly source: string;
+  private readonly service: string | undefined;
   private readonly closeTimeout: number;
   private readonly sdkLogLevel: number;
   private readonly beforeSend?: BeforeSendFn<JsonEvent> | BeforeSendFn<JsonEvent>[];
@@ -47,6 +48,7 @@ export class Tell {
     const resolved = resolveConfig(config);
     this.onError = resolved.onError;
     this.source = resolved.source;
+    this.service = config.service;
     this.closeTimeout = resolved.closeTimeout;
     this.sdkLogLevel = LOG_LEVELS[resolved.logLevel] ?? 2;
     this._disabled = resolved.disabled;
@@ -128,6 +130,7 @@ export class Tell {
     let event: JsonEvent | null = {
       type: "track",
       event: eventName,
+      service: this.service,
       device_id: this.deviceId,
       session_id: this.sessionId,
       user_id: userId,
@@ -156,6 +159,7 @@ export class Tell {
 
     let event: JsonEvent | null = {
       type: "identify",
+      service: this.service,
       device_id: this.deviceId,
       session_id: this.sessionId,
       user_id: userId,
@@ -184,6 +188,7 @@ export class Tell {
 
     let event: JsonEvent | null = {
       type: "group",
+      service: this.service,
       device_id: this.deviceId,
       session_id: this.sessionId,
       user_id: userId,
@@ -223,6 +228,7 @@ export class Tell {
     let event: JsonEvent | null = {
       type: "track",
       event: "Order Completed",
+      service: this.service,
       device_id: this.deviceId,
       session_id: this.sessionId,
       user_id: userId,
@@ -255,6 +261,7 @@ export class Tell {
 
     let event: JsonEvent | null = {
       type: "alias",
+      service: this.service,
       device_id: this.deviceId,
       session_id: this.sessionId,
       user_id: userId,
@@ -290,7 +297,7 @@ export class Tell {
       level,
       message,
       source: this.source,
-      service: service ?? "app",
+      service: service ?? this.service ?? "app",
       session_id: this.sessionId,
       timestamp: Date.now(),
       data,

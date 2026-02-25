@@ -60,6 +60,7 @@ describe("tell-js browser e2e", { skip: !process.env.TELL_E2E }, () => {
     send("configure");
     tell.configure(API_KEY, {
       endpoint: ENDPOINT,
+      service: "browser-e2e",
       batchSize: 10,
       flushInterval: 60_000, // long interval — we flush manually
       logLevel: "debug",

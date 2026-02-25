@@ -1,6 +1,8 @@
 import type { TellError, BeforeSendFn, JsonEvent, JsonLog } from "@tell-rs/core";
 
 export interface TellBrowserConfig {
+  /** Service name stamped on every event and log. Defaults to window.location.hostname. */
+  service?: string;
   endpoint?: string;
   batchSize?: number;
   flushInterval?: number;

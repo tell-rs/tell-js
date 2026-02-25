@@ -26,6 +26,7 @@ describe("@tell-rs/node e2e", { skip: !process.env.TELL_E2E }, () => {
     const tell = new Tell({
       apiKey: API_KEY,
       endpoint: ENDPOINT,
+      service: "node-e2e",
       batchSize: 10,
       logLevel: "debug",
       onError: (err) => console.error(`  !! ${err.message}`),

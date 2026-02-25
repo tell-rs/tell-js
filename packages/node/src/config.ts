@@ -5,6 +5,8 @@ import { hostname } from "node:os";
 
 export interface TellConfig {
   apiKey: string;
+  /** Service name stamped on every event and log. No auto-detect for server SDKs. */
+  service?: string;
   endpoint?: string;
   batchSize?: number;
   flushInterval?: number;

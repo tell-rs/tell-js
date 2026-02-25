@@ -48,6 +48,7 @@ Creates a new Tell instance. Each instance manages its own batching, transport, 
 const tell = new Tell({
   apiKey: "your-api-key",
   // All options below are optional:
+  service: "api-server",                  // stamped on every event and log
   endpoint: "https://collect.tell.app",  // default
   batchSize: 100,                         // events per batch
   flushInterval: 10_000,                  // ms between auto-flushes

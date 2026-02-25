@@ -28,6 +28,7 @@ export type LogLevel =
 export interface JsonEvent {
   type: EventType;
   event?: string;
+  service?: string;
   device_id: string;
   session_id?: string;
   user_id?: string;

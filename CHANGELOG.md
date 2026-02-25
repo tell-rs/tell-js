@@ -5,6 +5,17 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/),
 and this project adheres to [Semantic Versioning](https://semver.org/).
 
+## v0.2.7
+
+New:
+- events: service field stamped on every event and log across browser and node SDKs
+- browser: service defaults to window.location.hostname, configurable via configure()
+- node: service configurable via constructor, log fallback defaults to "app"
+
+Fix:
+- browser: revenue() was missing the service field, unlike all other event methods
+- browser: log() now falls back to resolvedService instead of hardcoded "app"
+
 ## [Unreleased]
 
 ### Added
