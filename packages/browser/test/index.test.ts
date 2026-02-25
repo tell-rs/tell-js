@@ -3,7 +3,7 @@ import assert from "node:assert/strict";
 import tell from "../src/index.js";
 import { fetchCalls, setupBrowserGlobals, setGlobal } from "./helpers.js";
 
-const API_KEY = "a1b2c3d4e5f60718293a4b5c6d7e8f90";
+const API_KEY = "feed1e11feed1e11feed1e11feed1e11";
 
 describe("tell (browser singleton)", () => {
   let cleanup: () => void;

@@ -31,7 +31,7 @@ import { TellPlugin } from "@tell-rs/vue";
 import App from "./App.vue";
 
 const app = createApp(App);
-app.use(TellPlugin, { apiKey: "your-api-key" });
+app.use(TellPlugin, { apiKey: "feed1e11feed1e11feed1e11feed1e11" });
 app.mount("#app");
 ```
 
@@ -61,7 +61,7 @@ Vue plugin. Pass options to `app.use()`:
 
 ```ts
 app.use(TellPlugin, {
-  apiKey: "your-api-key",
+  apiKey: "feed1e11feed1e11feed1e11feed1e11",
   // Plus any TellBrowserConfig options:
   // endpoint, batchSize, flushInterval, sessionTimeout, etc.
 });

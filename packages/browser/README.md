@@ -23,7 +23,7 @@ bun add @tell-rs/browser
 ```ts
 import tell from "@tell-rs/browser";
 
-tell.configure("your-api-key");
+tell.configure("feed1e11feed1e11feed1e11feed1e11");
 
 // Track an event
 tell.track("Button Clicked", { button: "signup" });
@@ -44,7 +44,7 @@ Events called before `configure()` are automatically queued and replayed.
 Initialize the SDK. Call once on page load.
 
 ```ts
-tell.configure("your-api-key", {
+tell.configure("feed1e11feed1e11feed1e11feed1e11", {
   // All options below are optional:
   service: "landing-page",                // stamped on every event and log (defaults to window.location.hostname)
   endpoint: "https://collect.tell.app",  // default
@@ -123,8 +123,8 @@ await tell.close()     // flush + shut down
 ```ts
 import tell, { development, production } from "@tell-rs/browser";
 
-tell.configure("your-api-key", development());  // localhost, debug logging
-tell.configure("your-api-key", production());   // defaults, error-only logging
+tell.configure("feed1e11feed1e11feed1e11feed1e11", development());  // localhost, debug logging
+tell.configure("feed1e11feed1e11feed1e11feed1e11", production());   // defaults, error-only logging
 ```
 
 ## Features
@@ -145,7 +145,7 @@ The browser SDK automatically collects anonymous device context (browser, OS, sc
 ```ts
 import tell, { redact, redactLog, SENSITIVE_PARAMS } from "@tell-rs/browser";
 
-tell.configure("your-api-key", {
+tell.configure("feed1e11feed1e11feed1e11feed1e11", {
   beforeSend: redact({
     dropRoutes: ["/internal", "/health"],
     stripParams: [...SENSITIVE_PARAMS, "session_id"],

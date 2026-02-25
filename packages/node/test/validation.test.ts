@@ -11,7 +11,7 @@ import {
 
 describe("validateApiKey", () => {
   it("accepts valid 32-char hex key", () => {
-    assert.doesNotThrow(() => validateApiKey("a1b2c3d4e5f60718293a4b5c6d7e8f90"));
+    assert.doesNotThrow(() => validateApiKey("feed1e11feed1e11feed1e11feed1e11"));
   });
 
   it("rejects empty string", () => {
@@ -27,7 +27,7 @@ describe("validateApiKey", () => {
   });
 
   it("rejects 33-char hex", () => {
-    assert.throws(() => validateApiKey("a1b2c3d4e5f60718293a4b5c6d7e8f900"), ConfigurationError);
+    assert.throws(() => validateApiKey("feed1e11feed1e11feed1e11feed1e110"), ConfigurationError);
   });
 });
 

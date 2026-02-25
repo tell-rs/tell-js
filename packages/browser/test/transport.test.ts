@@ -21,7 +21,7 @@ describe("BrowserTransport", () => {
   it("sends events as NDJSON with token in query param and keepalive", async () => {
     const transport = new BrowserTransport({
       endpoint: "https://collect.example.com",
-      apiKey: "a1b2c3d4e5f60718293a4b5c6d7e8f90",
+      apiKey: "feed1e11feed1e11feed1e11feed1e11",
       maxRetries: 0,
       networkTimeout: 10_000,
     });
@@ -34,7 +34,7 @@ describe("BrowserTransport", () => {
 
     assert.equal(fetchCalls.length, 1);
     assert.ok(fetchCalls[0].url.startsWith("https://collect.example.com/v1/events?token="));
-    assert.ok(fetchCalls[0].url.includes("a1b2c3d4e5f60718293a4b5c6d7e8f90"));
+    assert.ok(fetchCalls[0].url.includes("feed1e11feed1e11feed1e11feed1e11"));
     assert.equal(fetchCalls[0].init.method, "POST");
     assert.equal(fetchCalls[0].init.keepalive, true);
 
@@ -52,7 +52,7 @@ describe("BrowserTransport", () => {
   it("sends logs to /v1/logs", async () => {
     const transport = new BrowserTransport({
       endpoint: "https://collect.example.com",
-      apiKey: "a1b2c3d4e5f60718293a4b5c6d7e8f90",
+      apiKey: "feed1e11feed1e11feed1e11feed1e11",
       maxRetries: 0,
       networkTimeout: 10_000,
     });
@@ -68,7 +68,7 @@ describe("BrowserTransport", () => {
   it("skips empty arrays", async () => {
     const transport = new BrowserTransport({
       endpoint: "https://collect.example.com",
-      apiKey: "a1b2c3d4e5f60718293a4b5c6d7e8f90",
+      apiKey: "feed1e11feed1e11feed1e11feed1e11",
       maxRetries: 0,
       networkTimeout: 10_000,
     });
@@ -85,7 +85,7 @@ describe("BrowserTransport", () => {
     const errors: Error[] = [];
     const transport = new BrowserTransport({
       endpoint: "https://collect.example.com",
-      apiKey: "a1b2c3d4e5f60718293a4b5c6d7e8f90",
+      apiKey: "feed1e11feed1e11feed1e11feed1e11",
       maxRetries: 3,
       networkTimeout: 10_000,
       onError: (err) => errors.push(err),
@@ -106,7 +106,7 @@ describe("BrowserTransport", () => {
     let called = false;
     const transport = new BrowserTransport({
       endpoint: "https://collect.example.com",
-      apiKey: "a1b2c3d4e5f60718293a4b5c6d7e8f90",
+      apiKey: "feed1e11feed1e11feed1e11feed1e11",
       maxRetries: 3,
       networkTimeout: 10_000,
       onPayloadTooLarge: () => {
@@ -140,7 +140,7 @@ describe("BrowserTransport", () => {
 
     const transport = new BrowserTransport({
       endpoint: "https://collect.example.com",
-      apiKey: "a1b2c3d4e5f60718293a4b5c6d7e8f90",
+      apiKey: "feed1e11feed1e11feed1e11feed1e11",
       maxRetries: 3,
       networkTimeout: 10_000,
     });
@@ -164,7 +164,7 @@ describe("BrowserTransport", () => {
 
     const transport = new BrowserTransport({
       endpoint: "https://collect.example.com",
-      apiKey: "a1b2c3d4e5f60718293a4b5c6d7e8f90",
+      apiKey: "feed1e11feed1e11feed1e11feed1e11",
       maxRetries: 0,
       networkTimeout: 10_000,
     });
@@ -191,7 +191,7 @@ describe("BrowserTransport", () => {
     const errors: Error[] = [];
     const transport = new BrowserTransport({
       endpoint: "https://collect.example.com",
-      apiKey: "a1b2c3d4e5f60718293a4b5c6d7e8f90",
+      apiKey: "feed1e11feed1e11feed1e11feed1e11",
       maxRetries: 0,
       networkTimeout: 10_000,
       onError: (err) => errors.push(err),

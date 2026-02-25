@@ -13,7 +13,7 @@ function mockFetch(url: string | URL | Request, init?: RequestInit): Promise<Res
   return Promise.resolve({ status: 202, statusText: "Accepted" } as Response);
 }
 
-const API_KEY = "a1b2c3d4e5f60718293a4b5c6d7e8f90";
+const API_KEY = "feed1e11feed1e11feed1e11feed1e11";
 
 describe("Tell (Node SDK)", () => {
   let client: Tell | null = null;

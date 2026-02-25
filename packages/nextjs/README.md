@@ -32,7 +32,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html>
       <body>
-        <Tell apiKey="your-api-key" />
+        <Tell apiKey="feed1e11feed1e11feed1e11feed1e11" />
         {children}
       </body>
     </html>

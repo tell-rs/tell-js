@@ -4,7 +4,7 @@ import { createApp, defineComponent, h } from "vue";
 import tell from "@tell-rs/browser";
 import { TellPlugin, useTell } from "../src/index.js";
 
-const API_KEY = "a1b2c3d4e5f60718293a4b5c6d7e8f90";
+const API_KEY = "feed1e11feed1e11feed1e11feed1e11";
 
 // ---------------------------------------------------------------------------
 // Fetch mock (happy-dom globals already registered via test/setup.ts)

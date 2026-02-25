@@ -14,7 +14,7 @@ import {
 // Enable React act() environment
 (globalThis as any).IS_REACT_ACT_ENVIRONMENT = true;
 
-const API_KEY = "a1b2c3d4e5f60718293a4b5c6d7e8f90";
+const API_KEY = "feed1e11feed1e11feed1e11feed1e11";
 
 // ---------------------------------------------------------------------------
 // DOM + browser-global setup

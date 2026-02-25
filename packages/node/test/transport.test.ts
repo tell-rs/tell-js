@@ -35,7 +35,7 @@ describe("HttpTransport", () => {
   it("sends events as JSONL to /v1/events", async () => {
     const transport = new HttpTransport({
       endpoint: "https://collect.example.com",
-      apiKey: "a1b2c3d4e5f60718293a4b5c6d7e8f90",
+      apiKey: "feed1e11feed1e11feed1e11feed1e11",
       maxRetries: 0,
       networkTimeout: 30_000,
       gzip: false,
@@ -67,7 +67,7 @@ describe("HttpTransport", () => {
 
     const headers = fetchCalls[0].init.headers as Record<string, string>;
     assert.equal(headers["Content-Type"], "application/x-ndjson");
-    assert.equal(headers["Authorization"], "Bearer a1b2c3d4e5f60718293a4b5c6d7e8f90");
+    assert.equal(headers["Authorization"], "Bearer feed1e11feed1e11feed1e11feed1e11");
 
     // Verify JSONL format
     const body = fetchCalls[0].init.body as string;
@@ -87,7 +87,7 @@ describe("HttpTransport", () => {
   it("sends logs as JSONL to /v1/logs", async () => {
     const transport = new HttpTransport({
       endpoint: "https://collect.example.com",
-      apiKey: "a1b2c3d4e5f60718293a4b5c6d7e8f90",
+      apiKey: "feed1e11feed1e11feed1e11feed1e11",
       maxRetries: 0,
       networkTimeout: 30_000,
       gzip: false,
@@ -117,7 +117,7 @@ describe("HttpTransport", () => {
   it("skips send for empty arrays", async () => {
     const transport = new HttpTransport({
       endpoint: "https://collect.example.com",
-      apiKey: "a1b2c3d4e5f60718293a4b5c6d7e8f90",
+      apiKey: "feed1e11feed1e11feed1e11feed1e11",
       maxRetries: 0,
       networkTimeout: 30_000,
       gzip: false,
@@ -135,7 +135,7 @@ describe("HttpTransport", () => {
     const errors: Error[] = [];
     const transport = new HttpTransport({
       endpoint: "https://collect.example.com",
-      apiKey: "a1b2c3d4e5f60718293a4b5c6d7e8f90",
+      apiKey: "feed1e11feed1e11feed1e11feed1e11",
       maxRetries: 3,
       networkTimeout: 30_000,
       gzip: false,
@@ -165,7 +165,7 @@ describe("HttpTransport", () => {
 
     const transport = new HttpTransport({
       endpoint: "https://collect.example.com",
-      apiKey: "a1b2c3d4e5f60718293a4b5c6d7e8f90",
+      apiKey: "feed1e11feed1e11feed1e11feed1e11",
       maxRetries: 3,
       networkTimeout: 30_000,
       gzip: false,
@@ -188,7 +188,7 @@ describe("HttpTransport", () => {
 
     const transport = new HttpTransport({
       endpoint: "https://collect.example.com",
-      apiKey: "a1b2c3d4e5f60718293a4b5c6d7e8f90",
+      apiKey: "feed1e11feed1e11feed1e11feed1e11",
       maxRetries: 0,
       networkTimeout: 15_000,
       gzip: false,
@@ -208,7 +208,7 @@ describe("HttpTransport", () => {
 
     const transport = new HttpTransport({
       endpoint: "https://collect.example.com",
-      apiKey: "a1b2c3d4e5f60718293a4b5c6d7e8f90",
+      apiKey: "feed1e11feed1e11feed1e11feed1e11",
       maxRetries: 0,
       networkTimeout: 30_000,
       gzip: true,
@@ -233,7 +233,7 @@ describe("HttpTransport", () => {
   it("does not set Content-Encoding when gzip is false", async () => {
     const transport = new HttpTransport({
       endpoint: "https://collect.example.com",
-      apiKey: "a1b2c3d4e5f60718293a4b5c6d7e8f90",
+      apiKey: "feed1e11feed1e11feed1e11feed1e11",
       maxRetries: 0,
       networkTimeout: 30_000,
       gzip: false,
@@ -256,7 +256,7 @@ describe("HttpTransport", () => {
     let payloadTooLargeCalled = false;
     const transport = new HttpTransport({
       endpoint: "https://collect.example.com",
-      apiKey: "a1b2c3d4e5f60718293a4b5c6d7e8f90",
+      apiKey: "feed1e11feed1e11feed1e11feed1e11",
       maxRetries: 3,
       networkTimeout: 30_000,
       gzip: false,

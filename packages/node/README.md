@@ -23,7 +23,7 @@ bun add @tell-rs/node
 ```ts
 import { Tell } from "@tell-rs/node";
 
-const tell = new Tell({ apiKey: "your-api-key" });
+const tell = new Tell({ apiKey: "feed1e11feed1e11feed1e11feed1e11" });
 
 // Track an event
 tell.track("user_123", "Sign Up", { plan: "pro" });
@@ -46,7 +46,7 @@ Creates a new Tell instance. Each instance manages its own batching, transport, 
 
 ```ts
 const tell = new Tell({
-  apiKey: "your-api-key",
+  apiKey: "feed1e11feed1e11feed1e11feed1e11",
   // All options below are optional:
   service: "api-server",                  // stamped on every event and log
   endpoint: "https://collect.tell.app",  // default
@@ -106,10 +106,10 @@ await tell.close()    // flush + shut down (call before process exit)
 import { Tell, development, production } from "@tell-rs/node";
 
 // Development: localhost:8080, small batches, debug logging
-const dev = new Tell(development("your-api-key"));
+const dev = new Tell(development("feed1e11feed1e11feed1e11feed1e11"));
 
 // Production: default endpoint, error-only logging
-const prod = new Tell(production("your-api-key"));
+const prod = new Tell(production("feed1e11feed1e11feed1e11feed1e11"));
 ```
 
 ## Redaction
@@ -120,7 +120,7 @@ Use the built-in `redact()` factory to strip sensitive data before events leave 
 import { Tell, redact, redactLog, SENSITIVE_PARAMS } from "@tell-rs/node";
 
 const tell = new Tell({
-  apiKey: "your-api-key",
+  apiKey: "feed1e11feed1e11feed1e11feed1e11",
   beforeSend: redact({
     dropRoutes: ["/health", "/readyz"],
     stripParams: SENSITIVE_PARAMS,

@@ -8,7 +8,7 @@
 import { describe, it } from "node:test";
 import { Tell } from "../src/index.js";
 
-const API_KEY = "4cc3542f199d280d29eace8497ed062f";
+const API_KEY = "feed1e11feed1e11feed1e11feed1e11";
 const USER = "e2e_user_js_node";
 const ENDPOINT = "http://localhost:8080";
 

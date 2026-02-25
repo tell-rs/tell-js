@@ -1,6 +1,6 @@
 {
   "name": "@tell-rs/node",
-  "version": "0.2.6",
+  "version": "0.2.7",
   "description": "Tell SDK for Node.js — analytics events and structured logging",
   "type": "module",
   "main": "./dist/index.cjs",

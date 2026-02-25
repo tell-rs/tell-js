@@ -32,7 +32,7 @@ import { TellProvider } from "@tell-rs/react";
 
 export default function App() {
   return (
-    <TellProvider apiKey="your-api-key">
+    <TellProvider apiKey="feed1e11feed1e11feed1e11feed1e11">
       <YourApp />
     </TellProvider>
   );
