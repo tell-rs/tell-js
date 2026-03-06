@@ -3,8 +3,7 @@ import type { BeforeSendFn } from "@tell-rs/core";
 import type { JsonEvent, JsonLog } from "@tell-rs/core";
 import { hostname } from "node:os";
 
-export interface TellConfig {
-  apiKey: string;
+export interface TellOptions {
   /** Service name stamped on every event and log. No auto-detect for server SDKs. */
   service?: string;
   endpoint?: string;
@@ -38,37 +37,34 @@ export const DEFAULTS = {
 } as const;
 
 export type ResolvedConfig = Required<
-  Omit<TellConfig, "onError" | "beforeSend" | "beforeSendLog">
+  Omit<TellOptions, "onError" | "beforeSend" | "beforeSendLog">
 > &
-  Pick<TellConfig, "onError" | "beforeSend" | "beforeSendLog">;
+  Pick<TellOptions, "onError" | "beforeSend" | "beforeSendLog"> &
+  { apiKey: string };
 
-export function resolveConfig(config: TellConfig): ResolvedConfig {
-  return { ...DEFAULTS, ...config } as ResolvedConfig;
+export function resolveConfig(apiKey: string, options?: TellOptions): ResolvedConfig {
+  return { ...DEFAULTS, ...options, apiKey } as ResolvedConfig;
 }
 
 /** Development preset: localhost, small batches, fast flush, debug logging. */
 export function development(
-  apiKey: string,
-  overrides?: Partial<TellConfig>
-): TellConfig {
+  overrides?: Partial<TellOptions>
+): TellOptions {
   return {
     endpoint: "http://localhost:8080",
     batchSize: 10,
     flushInterval: 2_000,
     logLevel: "debug",
     ...overrides,
-    apiKey,
   };
 }
 
 /** Production preset: default endpoint, default batching, error-only logging. */
 export function production(
-  apiKey: string,
-  overrides?: Partial<TellConfig>
-): TellConfig {
+  overrides?: Partial<TellOptions>
+): TellOptions {
   return {
     logLevel: "error",
     ...overrides,
-    apiKey,
   };
 }

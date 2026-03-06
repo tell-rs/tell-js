@@ -162,7 +162,7 @@ describe("tell (browser singleton)", () => {
 
   it("log sends to /v1/logs", async () => {
     tell.configure(API_KEY, { botDetection: false });
-    tell.logError("connection refused", "api", { code: 500 });
+    tell.logError("connection refused", { code: 500 });
     await tell.flush();
 
     const logCall = fetchCalls.find((c) => c.url.includes("/v1/logs"));
@@ -170,7 +170,7 @@ describe("tell (browser singleton)", () => {
     const log = JSON.parse(logCall.init.body as string);
     assert.equal(log.level, "error");
     assert.equal(log.message, "connection refused");
-    assert.equal(log.service, "api");
+    assert.equal(log.service, "browser");
   });
 
   // --- optOut / optIn ---

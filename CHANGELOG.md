@@ -5,6 +5,18 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/),
 and this project adheres to [Semantic Versioning](https://semver.org/).
 
+## v0.3.0
+
+New:
+- node: withService() creates scoped instances that stamp a different service on all events and logs
+
+Breaking:
+- browser: service parameter removed from log() and all log convenience methods — service is set via configure() only
+- node: constructor changed from new Tell(config) to new Tell(apiKey, options?)
+- node: TellConfig renamed to TellOptions
+- node: service parameter removed from log methods, use withService() for per-call scoping
+- node: development() and production() presets no longer take apiKey as first argument
+
 ## v0.2.7
 
 New:

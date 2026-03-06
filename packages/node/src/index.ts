@@ -1,4 +1,4 @@
-import type { TellConfig } from "./config.js";
+import type { TellOptions } from "./config.js";
 import type { JsonEvent, JsonLog, LogLevel, Properties, BeforeSendFn } from "@tell-rs/core";
 import { resolveConfig } from "./config.js";
 import { ClosedError, ValidationError, validateApiKey, validateEventName, validateLogMessage, validateUserId, Batcher, runBeforeSend } from "@tell-rs/core";
@@ -11,8 +11,27 @@ export { redact, redactLog, SENSITIVE_PARAMS, type RedactOptions } from "@tell-r
 export { TellError, ConfigurationError, ValidationError, NetworkError, ClosedError, SerializationError } from "@tell-rs/core";
 
 // Re-export node-specific config
-export type { TellConfig } from "./config.js";
+export type { TellOptions } from "./config.js";
 export { development, production } from "./config.js";
+
+export interface TellServiceScope {
+  track(userId: string, eventName: string, properties?: Properties): void;
+  identify(userId: string, traits?: Properties): void;
+  group(userId: string, groupId: string, properties?: Properties): void;
+  revenue(userId: string, amount: number, currency: string, orderId: string, properties?: Properties): void;
+  alias(previousId: string, userId: string): void;
+  log(level: LogLevel, message: string, data?: Properties): void;
+  logEmergency(message: string, data?: Properties): void;
+  logAlert(message: string, data?: Properties): void;
+  logCritical(message: string, data?: Properties): void;
+  logError(message: string, data?: Properties): void;
+  logWarning(message: string, data?: Properties): void;
+  logNotice(message: string, data?: Properties): void;
+  logInfo(message: string, data?: Properties): void;
+  logDebug(message: string, data?: Properties): void;
+  logTrace(message: string, data?: Properties): void;
+  withService(service: string): TellServiceScope;
+}
 
 const LOG_LEVELS: Record<string, number> = {
   error: 0,
@@ -42,13 +61,13 @@ export class Tell {
   private closed = false;
   private _disabled: boolean;
 
-  constructor(config: TellConfig) {
-    validateApiKey(config.apiKey);
+  constructor(apiKey: string, options?: TellOptions) {
+    validateApiKey(apiKey);
 
-    const resolved = resolveConfig(config);
+    const resolved = resolveConfig(apiKey, options);
     this.onError = resolved.onError;
     this.source = resolved.source;
-    this.service = config.service;
+    this.service = options?.service;
     this.closeTimeout = resolved.closeTimeout;
     this.sdkLogLevel = LOG_LEVELS[resolved.logLevel] ?? 2;
     this._disabled = resolved.disabled;
@@ -116,7 +135,7 @@ export class Tell {
 
   // --- Events ---
 
-  track(userId: string, eventName: string, properties?: Properties): void {
+  private _track(userId: string, eventName: string, properties: Properties | undefined, service: string | undefined): void {
     if (this._disabled) return;
     if (this.closed) { this.reportError(new ClosedError()); return; }
     try {
@@ -130,7 +149,7 @@ export class Tell {
     let event: JsonEvent | null = {
       type: "track",
       event: eventName,
-      service: this.service,
+      service,
       device_id: this.deviceId,
       session_id: this.sessionId,
       user_id: userId,
@@ -147,7 +166,11 @@ export class Tell {
     this.eventBatcher.add(event);
   }
 
-  identify(userId: string, traits?: Properties): void {
+  track(userId: string, eventName: string, properties?: Properties): void {
+    this._track(userId, eventName, properties, this.service);
+  }
+
+  private _identify(userId: string, traits: Properties | undefined, service: string | undefined): void {
     if (this._disabled) return;
     if (this.closed) { this.reportError(new ClosedError()); return; }
     try {
@@ -159,7 +182,7 @@ export class Tell {
 
     let event: JsonEvent | null = {
       type: "identify",
-      service: this.service,
+      service,
       device_id: this.deviceId,
       session_id: this.sessionId,
       user_id: userId,
@@ -175,7 +198,11 @@ export class Tell {
     this.eventBatcher.add(event);
   }
 
-  group(userId: string, groupId: string, properties?: Properties): void {
+  identify(userId: string, traits?: Properties): void {
+    this._identify(userId, traits, this.service);
+  }
+
+  private _group(userId: string, groupId: string, properties: Properties | undefined, service: string | undefined): void {
     if (this._disabled) return;
     if (this.closed) { this.reportError(new ClosedError()); return; }
     try {
@@ -188,7 +215,7 @@ export class Tell {
 
     let event: JsonEvent | null = {
       type: "group",
-      service: this.service,
+      service,
       device_id: this.deviceId,
       session_id: this.sessionId,
       user_id: userId,
@@ -206,12 +233,17 @@ export class Tell {
     this.eventBatcher.add(event);
   }
 
-  revenue(
+  group(userId: string, groupId: string, properties?: Properties): void {
+    this._group(userId, groupId, properties, this.service);
+  }
+
+  private _revenue(
     userId: string,
     amount: number,
     currency: string,
     orderId: string,
-    properties?: Properties
+    properties: Properties | undefined,
+    service: string | undefined,
   ): void {
     if (this._disabled) return;
     if (this.closed) { this.reportError(new ClosedError()); return; }
@@ -228,7 +260,7 @@ export class Tell {
     let event: JsonEvent | null = {
       type: "track",
       event: "Order Completed",
-      service: this.service,
+      service,
       device_id: this.deviceId,
       session_id: this.sessionId,
       user_id: userId,
@@ -248,7 +280,17 @@ export class Tell {
     this.eventBatcher.add(event);
   }
 
-  alias(previousId: string, userId: string): void {
+  revenue(
+    userId: string,
+    amount: number,
+    currency: string,
+    orderId: string,
+    properties?: Properties
+  ): void {
+    this._revenue(userId, amount, currency, orderId, properties, this.service);
+  }
+
+  private _alias(previousId: string, userId: string, service: string | undefined): void {
     if (this._disabled) return;
     if (this.closed) { this.reportError(new ClosedError()); return; }
     try {
@@ -261,7 +303,7 @@ export class Tell {
 
     let event: JsonEvent | null = {
       type: "alias",
-      service: this.service,
+      service,
       device_id: this.deviceId,
       session_id: this.sessionId,
       user_id: userId,
@@ -277,13 +319,17 @@ export class Tell {
     this.eventBatcher.add(event);
   }
 
+  alias(previousId: string, userId: string): void {
+    this._alias(previousId, userId, this.service);
+  }
+
   resetSession(): void {
     this.sessionId = uuid();
   }
 
   // --- Logging ---
 
-  log(level: LogLevel, message: string, service?: string, data?: Properties): void {
+  private _log(level: LogLevel, message: string, data: Properties | undefined, service: string): void {
     if (this._disabled) return;
     if (this.closed) { this.reportError(new ClosedError()); return; }
     try {
@@ -297,7 +343,7 @@ export class Tell {
       level,
       message,
       source: this.source,
-      service: service ?? this.service ?? "app",
+      service,
       session_id: this.sessionId,
       timestamp: Date.now(),
       data,
@@ -311,32 +357,59 @@ export class Tell {
     this.logBatcher.add(logEntry);
   }
 
-  logEmergency(message: string, service?: string, data?: Properties): void {
-    this.log("emergency", message, service, data);
+  log(level: LogLevel, message: string, data?: Properties): void {
+    this._log(level, message, data, this.service ?? "app");
   }
-  logAlert(message: string, service?: string, data?: Properties): void {
-    this.log("alert", message, service, data);
+
+  logEmergency(message: string, data?: Properties): void {
+    this.log("emergency", message, data);
   }
-  logCritical(message: string, service?: string, data?: Properties): void {
-    this.log("critical", message, service, data);
+  logAlert(message: string, data?: Properties): void {
+    this.log("alert", message, data);
   }
-  logError(message: string, service?: string, data?: Properties): void {
-    this.log("error", message, service, data);
+  logCritical(message: string, data?: Properties): void {
+    this.log("critical", message, data);
   }
-  logWarning(message: string, service?: string, data?: Properties): void {
-    this.log("warning", message, service, data);
+  logError(message: string, data?: Properties): void {
+    this.log("error", message, data);
   }
-  logNotice(message: string, service?: string, data?: Properties): void {
-    this.log("notice", message, service, data);
+  logWarning(message: string, data?: Properties): void {
+    this.log("warning", message, data);
   }
-  logInfo(message: string, service?: string, data?: Properties): void {
-    this.log("info", message, service, data);
+  logNotice(message: string, data?: Properties): void {
+    this.log("notice", message, data);
   }
-  logDebug(message: string, service?: string, data?: Properties): void {
-    this.log("debug", message, service, data);
+  logInfo(message: string, data?: Properties): void {
+    this.log("info", message, data);
   }
-  logTrace(message: string, service?: string, data?: Properties): void {
-    this.log("trace", message, service, data);
+  logDebug(message: string, data?: Properties): void {
+    this.log("debug", message, data);
+  }
+  logTrace(message: string, data?: Properties): void {
+    this.log("trace", message, data);
+  }
+
+  // --- Service Scoping ---
+
+  withService(service: string): TellServiceScope {
+    return {
+      track: (userId, eventName, properties) => this._track(userId, eventName, properties, service),
+      identify: (userId, traits) => this._identify(userId, traits, service),
+      group: (userId, groupId, properties) => this._group(userId, groupId, properties, service),
+      revenue: (userId, amount, currency, orderId, properties) => this._revenue(userId, amount, currency, orderId, properties, service),
+      alias: (previousId, userId) => this._alias(previousId, userId, service),
+      log: (level, message, data) => this._log(level, message, data, service),
+      logEmergency: (message, data) => this._log("emergency", message, data, service),
+      logAlert: (message, data) => this._log("alert", message, data, service),
+      logCritical: (message, data) => this._log("critical", message, data, service),
+      logError: (message, data) => this._log("error", message, data, service),
+      logWarning: (message, data) => this._log("warning", message, data, service),
+      logNotice: (message, data) => this._log("notice", message, data, service),
+      logInfo: (message, data) => this._log("info", message, data, service),
+      logDebug: (message, data) => this._log("debug", message, data, service),
+      logTrace: (message, data) => this._log("trace", message, data, service),
+      withService: (newService) => this.withService(newService),
+    };
   }
 
   // --- Lifecycle ---

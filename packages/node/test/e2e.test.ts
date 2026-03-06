@@ -23,8 +23,7 @@ describe("@tell-rs/node e2e", { skip: !process.env.TELL_E2E }, () => {
     console.log(`  Endpoint: ${ENDPOINT}`);
     console.log();
 
-    const tell = new Tell({
-      apiKey: API_KEY,
+    const tell = new Tell(API_KEY, {
       endpoint: ENDPOINT,
       service: "node-e2e",
       batchSize: 10,
@@ -87,59 +86,59 @@ describe("@tell-rs/node e2e", { skip: !process.env.TELL_E2E }, () => {
 
     // ── Logging — all 9 levels ────────────────────────────────────────
     send("log_emergency");
-    tell.logEmergency("System failure — disk full", "storage", {
+    tell.logEmergency("System failure — disk full", {
       disk: "/dev/sda1",
       usage_pct: 100,
     });
 
     send("log_alert");
-    tell.logAlert("Database replication lag > 30s", "db", {
+    tell.logAlert("Database replication lag > 30s", {
       lag_seconds: 34,
     });
 
     send("log_critical");
-    tell.logCritical("Payment gateway unreachable", "billing", {
+    tell.logCritical("Payment gateway unreachable", {
       gateway: "stripe",
       timeout_ms: 5000,
     });
 
     send("log_error");
-    tell.logError("Failed to send email", "notifications", {
+    tell.logError("Failed to send email", {
       recipient: "user@example.com",
       error: "SMTP timeout",
     });
 
     send("log_warning");
-    tell.logWarning("Rate limit approaching", "api", {
+    tell.logWarning("Rate limit approaching", {
       current_rps: 950,
       limit_rps: 1000,
     });
 
     send("log_notice");
-    tell.logNotice("New deployment started", "deploy", {
+    tell.logNotice("New deployment started", {
       version: "2.1.0",
       region: "us-east-1",
     });
 
     send("log_info");
-    tell.logInfo("User signed in", "auth", {
+    tell.logInfo("User signed in", {
       method: "oauth",
       provider: "github",
     });
 
     send("log_debug");
-    tell.logDebug("Cache miss for key", "cache", {
+    tell.logDebug("Cache miss for key", {
       key: "user:e2e:profile",
       ttl_remaining: 0,
     });
 
     send("log_trace");
-    tell.logTrace("Entering request handler", "http", {
+    tell.logTrace("Entering request handler", {
       method: "GET",
       path: "/api/v1/events",
     });
 
-    send("log with no service/data");
+    send("log with no data");
     tell.logInfo("Heartbeat");
 
     // ── Unregister ────────────────────────────────────────────────────

@@ -32,7 +32,7 @@ tell.track("Button Clicked", { button: "signup" });
 tell.identify("user_123", { name: "Alice" });
 
 // Structured logging
-tell.logInfo("Checkout started", "commerce");
+tell.logInfo("Checkout started", { section: "commerce" });
 ```
 
 Events called before `configure()` are automatically queued and replayed.
@@ -81,13 +81,13 @@ No `userId` parameter on `track`, `group`, or `revenue` — the browser SDK uses
 ### Logging
 
 ```ts
-tell.log(level, message, service?, data?)
+tell.log(level, message, data?)
 
 // Convenience methods
-tell.logError(message, service?, data?)
-tell.logWarning(message, service?, data?)
-tell.logInfo(message, service?, data?)
-tell.logDebug(message, service?, data?)
+tell.logError(message, data?)
+tell.logWarning(message, data?)
+tell.logInfo(message, data?)
+tell.logDebug(message, data?)
 // ... and logEmergency, logAlert, logCritical, logNotice, logTrace
 ```
 

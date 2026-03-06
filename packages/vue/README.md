@@ -82,7 +82,7 @@ const tell = useTell();
 
 tell.track("Page Viewed", { path: "/dashboard" });
 tell.identify("user_123", { name: "Alice" });
-tell.logInfo("Component mounted", "ui");
+tell.logInfo("Component mounted");
 ```
 
 Throws if `TellPlugin` was not installed.

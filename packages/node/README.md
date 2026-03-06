@@ -23,7 +23,7 @@ bun add @tell-rs/node
 ```ts
 import { Tell } from "@tell-rs/node";
 
-const tell = new Tell({ apiKey: "feed1e11feed1e11feed1e11feed1e11" });
+const tell = new Tell("feed1e11feed1e11feed1e11feed1e11");
 
 // Track an event
 tell.track("user_123", "Sign Up", { plan: "pro" });
@@ -32,7 +32,7 @@ tell.track("user_123", "Sign Up", { plan: "pro" });
 tell.identify("user_123", { name: "Alice", email: "alice@example.com" });
 
 // Structured logging
-tell.logInfo("User signed up", "auth", { userId: "user_123" });
+tell.logInfo("User signed up", { userId: "user_123" });
 
 // Flush and close before process exit
 await tell.close();
@@ -40,13 +40,12 @@ await tell.close();
 
 ## API
 
-### `new Tell(config)`
+### `new Tell(apiKey, options?)`
 
 Creates a new Tell instance. Each instance manages its own batching, transport, and lifecycle.
 
 ```ts
-const tell = new Tell({
-  apiKey: "feed1e11feed1e11feed1e11feed1e11",
+const tell = new Tell("feed1e11feed1e11feed1e11feed1e11", {
   // All options below are optional:
   service: "api-server",                  // stamped on every event and log
   endpoint: "https://collect.tell.app",  // default
@@ -79,19 +78,36 @@ tell.alias(previousId, userId)
 ### Logging
 
 ```ts
-tell.log(level, message, service?, data?)
+tell.log(level, message, data?)
 
 // Convenience methods
-tell.logEmergency(message, service?, data?)
-tell.logAlert(message, service?, data?)
-tell.logCritical(message, service?, data?)
-tell.logError(message, service?, data?)
-tell.logWarning(message, service?, data?)
-tell.logNotice(message, service?, data?)
-tell.logInfo(message, service?, data?)
-tell.logDebug(message, service?, data?)
-tell.logTrace(message, service?, data?)
+tell.logEmergency(message, data?)
+tell.logAlert(message, data?)
+tell.logCritical(message, data?)
+tell.logError(message, data?)
+tell.logWarning(message, data?)
+tell.logNotice(message, data?)
+tell.logInfo(message, data?)
+tell.logDebug(message, data?)
+tell.logTrace(message, data?)
 ```
+
+### Service Scoping
+
+Use `withService()` to create a scoped view that stamps a different service name on all events and logs, without affecting the parent instance:
+
+```ts
+const tell = new Tell("feed1e11feed1e11feed1e11feed1e11", { service: "api" });
+
+const payments = tell.withService("payments");
+payments.logError("Charge failed", { code: 402 });
+payments.track("u_1", "Payment Failed");
+
+// Parent instance is unaffected
+tell.logInfo("Still tagged as api");
+```
+
+Scoped instances share the parent's batching and transport — call `tell.flush()` or `tell.close()` as usual.
 
 ### Lifecycle
 
@@ -106,10 +122,10 @@ await tell.close()    // flush + shut down (call before process exit)
 import { Tell, development, production } from "@tell-rs/node";
 
 // Development: localhost:8080, small batches, debug logging
-const dev = new Tell(development("feed1e11feed1e11feed1e11feed1e11"));
+const dev = new Tell("feed1e11feed1e11feed1e11feed1e11", development());
 
 // Production: default endpoint, error-only logging
-const prod = new Tell(production("feed1e11feed1e11feed1e11feed1e11"));
+const prod = new Tell("feed1e11feed1e11feed1e11feed1e11", production());
 ```
 
 ## Redaction
@@ -119,8 +135,7 @@ Use the built-in `redact()` factory to strip sensitive data before events leave 
 ```ts
 import { Tell, redact, redactLog, SENSITIVE_PARAMS } from "@tell-rs/node";
 
-const tell = new Tell({
-  apiKey: "feed1e11feed1e11feed1e11feed1e11",
+const tell = new Tell("feed1e11feed1e11feed1e11feed1e11", {
   beforeSend: redact({
     dropRoutes: ["/health", "/readyz"],
     stripParams: SENSITIVE_PARAMS,

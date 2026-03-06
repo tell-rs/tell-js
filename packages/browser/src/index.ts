@@ -165,21 +165,16 @@ export interface TellInstance {
     properties?: Properties
   ): void;
   alias(previousId: string, userId: string): void;
-  log(
-    level: LogLevel,
-    message: string,
-    service?: string,
-    data?: Properties
-  ): void;
-  logEmergency(message: string, service?: string, data?: Properties): void;
-  logAlert(message: string, service?: string, data?: Properties): void;
-  logCritical(message: string, service?: string, data?: Properties): void;
-  logError(message: string, service?: string, data?: Properties): void;
-  logWarning(message: string, service?: string, data?: Properties): void;
-  logNotice(message: string, service?: string, data?: Properties): void;
-  logInfo(message: string, service?: string, data?: Properties): void;
-  logDebug(message: string, service?: string, data?: Properties): void;
-  logTrace(message: string, service?: string, data?: Properties): void;
+  log(level: LogLevel, message: string, data?: Properties): void;
+  logEmergency(message: string, data?: Properties): void;
+  logAlert(message: string, data?: Properties): void;
+  logCritical(message: string, data?: Properties): void;
+  logError(message: string, data?: Properties): void;
+  logWarning(message: string, data?: Properties): void;
+  logNotice(message: string, data?: Properties): void;
+  logInfo(message: string, data?: Properties): void;
+  logDebug(message: string, data?: Properties): void;
+  logTrace(message: string, data?: Properties): void;
   register(properties: Properties): void;
   unregister(key: string): void;
   optOut(): void;
@@ -305,7 +300,7 @@ const tell: TellInstance = {
         if (event.lineno) data.lineno = event.lineno;
         if (event.colno) data.colno = event.colno;
         if (event.error?.stack) data.stack = event.error.stack;
-        tell.logError(msg, "browser", data);
+        tell.logError(msg, data);
       };
       rejectionHandler = (event: PromiseRejectionEvent) => {
         if (_disabled || _optedOut || closed) return;
@@ -316,7 +311,7 @@ const tell: TellInstance = {
             : String(reason ?? "Unhandled promise rejection");
         const data: Properties = {};
         if (reason instanceof Error && reason.stack) data.stack = reason.stack;
-        tell.logError(msg, "browser", data);
+        tell.logError(msg, data);
       };
       window.addEventListener("error", errorHandler);
       window.addEventListener("unhandledrejection", rejectionHandler);
@@ -547,14 +542,9 @@ const tell: TellInstance = {
   // Logging
   // -----------------------------------------------------------------------
 
-  log(
-    level: LogLevel,
-    message: string,
-    service?: string,
-    data?: Properties
-  ): void {
+  log(level: LogLevel, message: string, data?: Properties): void {
     if (!configured) {
-      queue.push({ method: "log", args: [level, message, service, data] });
+      queue.push({ method: "log", args: [level, message, data] });
       return;
     }
     if (_disabled || _optedOut) return;
@@ -573,7 +563,7 @@ const tell: TellInstance = {
       level,
       message,
       source: resolvedConfig.source,
-      service: service ?? resolvedService,
+      service: resolvedService,
       session_id: sessionManager.sessionId,
       timestamp: Date.now(),
       data,
@@ -587,32 +577,32 @@ const tell: TellInstance = {
     logBatcher.add(logEntry);
   },
 
-  logEmergency(message: string, service?: string, data?: Properties): void {
-    tell.log("emergency", message, service, data);
+  logEmergency(message: string, data?: Properties): void {
+    tell.log("emergency", message, data);
   },
-  logAlert(message: string, service?: string, data?: Properties): void {
-    tell.log("alert", message, service, data);
+  logAlert(message: string, data?: Properties): void {
+    tell.log("alert", message, data);
   },
-  logCritical(message: string, service?: string, data?: Properties): void {
-    tell.log("critical", message, service, data);
+  logCritical(message: string, data?: Properties): void {
+    tell.log("critical", message, data);
   },
-  logError(message: string, service?: string, data?: Properties): void {
-    tell.log("error", message, service, data);
+  logError(message: string, data?: Properties): void {
+    tell.log("error", message, data);
   },
-  logWarning(message: string, service?: string, data?: Properties): void {
-    tell.log("warning", message, service, data);
+  logWarning(message: string, data?: Properties): void {
+    tell.log("warning", message, data);
   },
-  logNotice(message: string, service?: string, data?: Properties): void {
-    tell.log("notice", message, service, data);
+  logNotice(message: string, data?: Properties): void {
+    tell.log("notice", message, data);
   },
-  logInfo(message: string, service?: string, data?: Properties): void {
-    tell.log("info", message, service, data);
+  logInfo(message: string, data?: Properties): void {
+    tell.log("info", message, data);
   },
-  logDebug(message: string, service?: string, data?: Properties): void {
-    tell.log("debug", message, service, data);
+  logDebug(message: string, data?: Properties): void {
+    tell.log("debug", message, data);
   },
-  logTrace(message: string, service?: string, data?: Properties): void {
-    tell.log("trace", message, service, data);
+  logTrace(message: string, data?: Properties): void {
+    tell.log("trace", message, data);
   },
 
   // -----------------------------------------------------------------------
