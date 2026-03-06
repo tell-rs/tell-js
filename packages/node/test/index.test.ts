@@ -232,6 +232,34 @@ describe("Tell (Node SDK)", () => {
     assert.equal(log.service, "app");
   });
 
+  it("constructor service option stamps service on events", async () => {
+    client = new Tell(API_KEY, { service: "billing" });
+
+    client.track("u_1", "Charge");
+    client.identify("u_2", { name: "Alice" });
+    client.group("u_3", "g_1");
+    client.revenue("u_4", 10, "USD", "ord_1");
+    client.alias("anon_1", "u_5");
+    await client.flush();
+
+    const bodies = fetchCalls.flatMap((c) =>
+      c.body.split("\n").filter(Boolean).map((line) => JSON.parse(line))
+    );
+    for (const body of bodies) {
+      assert.equal(body.service, "billing", `expected billing on ${body.type}`);
+    }
+  });
+
+  it("events have undefined service when no service option provided", async () => {
+    client = new Tell(API_KEY);
+
+    client.track("u_1", "Click");
+    await client.flush();
+
+    const event = JSON.parse(fetchCalls[0].body);
+    assert.equal(event.service, undefined);
+  });
+
   it("rejects events after close", async () => {
     const errors: Error[] = [];
     client = new Tell(API_KEY, {
@@ -466,6 +494,32 @@ describe("withService", () => {
     for (const body of bodies) {
       assert.equal(body.service, "billing", `expected billing on ${body.type}`);
     }
+  });
+
+  it("multiple concurrent scopes don't interfere", async () => {
+    client = new Tell(API_KEY);
+    const scopeA = client.withService("auth");
+    const scopeB = client.withService("payments");
+
+    scopeA.track("u_1", "Login");
+    scopeB.track("u_1", "Charge");
+    scopeA.logInfo("session started");
+    scopeB.logError("charge failed");
+    await client.flush();
+
+    const allBodies = fetchCalls.flatMap((c: any) =>
+      c.body.split("\n").filter(Boolean).map((line: string) => JSON.parse(line))
+    );
+
+    const login = allBodies.find((b: any) => b.event === "Login");
+    const charge = allBodies.find((b: any) => b.event === "Charge");
+    const sessionLog = allBodies.find((b: any) => b.message === "session started");
+    const chargeLog = allBodies.find((b: any) => b.message === "charge failed");
+
+    assert.equal(login?.service, "auth");
+    assert.equal(charge?.service, "payments");
+    assert.equal(sessionLog?.service, "auth");
+    assert.equal(chargeLog?.service, "payments");
   });
 });
 

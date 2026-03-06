@@ -173,6 +173,43 @@ describe("tell (browser singleton)", () => {
     assert.equal(log.service, "browser");
   });
 
+  // --- Service configuration ---
+
+  it("service config option is stamped on logs and events", async () => {
+    tell.configure(API_KEY, { botDetection: false, service: "landing-page" });
+    tell.track("Click");
+    tell.logInfo("loaded");
+    await tell.flush();
+
+    const bodies = fetchCalls.flatMap((c) =>
+      (c.init.body as string).split("\n").map((l) => JSON.parse(l))
+    );
+    const event = bodies.find((b: any) => b.event === "Click");
+    assert.equal(event?.service, "landing-page");
+
+    const logCall = fetchCalls.find((c) => c.url.includes("/v1/logs"));
+    assert.ok(logCall);
+    const log = JSON.parse(logCall.init.body as string);
+    assert.equal(log.service, "landing-page");
+  });
+
+  it("service defaults to window.location.hostname", async () => {
+    // The SDK reads window.location?.hostname, so set it on the window mock
+    (window as any).location = {
+      href: "https://myapp.example.com/dashboard",
+      hostname: "myapp.example.com",
+    };
+
+    tell.configure(API_KEY, { botDetection: false });
+    tell.logInfo("test");
+    await tell.flush();
+
+    const logCall = fetchCalls.find((c) => c.url.includes("/v1/logs"));
+    assert.ok(logCall);
+    const log = JSON.parse(logCall.init.body as string);
+    assert.equal(log.service, "myapp.example.com");
+  });
+
   // --- optOut / optIn ---
 
   it("optOut stops sending, optIn resumes", async () => {
@@ -511,6 +548,7 @@ describe("tell (browser singleton)", () => {
     assert.ok(logCall, "expected a log call");
     const log = JSON.parse(logCall.init.body as string);
     assert.equal(log.level, "error");
+    assert.equal(log.service, "browser");
     assert.ok(log.message.includes("promise failed"));
   });
 
