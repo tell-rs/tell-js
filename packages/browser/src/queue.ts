@@ -6,7 +6,7 @@ export type QueuedCall =
   | { method: "group"; args: [string, Properties?] }
   | { method: "revenue"; args: [number, string, string, Properties?] }
   | { method: "alias"; args: [string, string] }
-  | { method: "log"; args: [LogLevel, string, string?, Properties?] }
+  | { method: "log"; args: [LogLevel, string, Properties?] }
   | { method: "register"; args: [Properties] }
   | { method: "unregister"; args: [string] }
   | { method: "optOut"; args: [] }
