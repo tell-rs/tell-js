@@ -1,9 +1,11 @@
 # Changelog
 
-All notable changes to this project will be documented in this file.
+## v0.3.2
 
-The format is based on [Keep a Changelog](https://keepachangelog.com/),
-and this project adheres to [Semantic Versioning](https://semver.org/).
+Fix:
+- session: remove app_foreground event that fired on every tab switch, causing excessive session rows
+- session: persist session ID to localStorage so page navigations continue the same session
+- session: 24-hour max session length to prevent zombie sessions from tabs left open indefinitely
 
 ## v0.3.0
 

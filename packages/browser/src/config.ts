@@ -15,6 +15,7 @@ export interface TellBrowserConfig {
   disabled?: boolean;
   maxQueueSize?: number;
   sessionTimeout?: number;
+  maxSessionLength?: number;
   persistence?: "localStorage" | "memory";
   respectDoNotTrack?: boolean;
   botDetection?: boolean;
@@ -35,6 +36,7 @@ export const DEFAULTS = {
   disabled: false,
   maxQueueSize: 1000,
   sessionTimeout: 1_800_000, // 30 min
+  maxSessionLength: 86_400_000, // 24 hours
   persistence: "localStorage" as const,
   respectDoNotTrack: false,
   botDetection: true,

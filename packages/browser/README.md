@@ -57,6 +57,7 @@ tell.configure("feed1e11feed1e11feed1e11feed1e11", {
   disabled: false,                        // disable all tracking
   maxQueueSize: 1000,                     // max queued items
   sessionTimeout: 1_800_000,              // 30 min session timeout
+  maxSessionLength: 86_400_000,           // 24 hour max session length
   persistence: "localStorage",            // "localStorage" | "memory"
   respectDoNotTrack: false,               // honor browser DNT setting
   botDetection: true,                     // auto-disable for bots
@@ -129,7 +130,7 @@ tell.configure("feed1e11feed1e11feed1e11feed1e11", production());   // defaults,
 
 ## Features
 
-- **Automatic sessions** — rotated on 30-min inactivity or tab hidden/visible
+- **Automatic sessions** — persisted across page loads, rotated on 30-min inactivity or 24-hour max lifetime
 - **Pre-init queue** — events called before `configure()` are buffered and replayed
 - **sendBeacon flush** — events are flushed via `navigator.sendBeacon` on page unload
 - **Bot detection** — auto-disables for headless browsers and bots

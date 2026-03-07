@@ -277,6 +277,8 @@ const tell: TellInstance = {
     // Session management
     sessionManager = new SessionManager({
       timeout: resolvedConfig.sessionTimeout,
+      maxLength: resolvedConfig.maxSessionLength,
+      storage,
       onNewSession,
     });
 
